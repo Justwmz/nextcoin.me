@@ -4,6 +4,8 @@
     <title>NextCoin.me | Main Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     </head>
@@ -108,7 +110,6 @@
                 <p class="form-control-static">10000</p>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary">Deposit USD</button>
           </form>
           <br>
           <form class="form-horizontal" role="form" action="deposit_nxt.php"> 
@@ -128,14 +129,9 @@
                 </p>
               </div> 
             </div>
-            <button type="submit" class="btn btn-primary">Deposit NXT</button>
           </form>                
         </div>
       </div>
     </div>
-
-
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
   </body>
 </html>

@@ -15,9 +15,18 @@ foreach ($Item['transactionIds'] as $a) {
                 while($row = mysql_fetch_assoc($result)) {
 
           			if($obj->{'sender'} == $row['wallet_nxt'] ){
-					mysql_query("INSERT INTO payments (user_id, amount_pay, times) VALUES (1, ".$obj->{'amount'}.",".$obj->{'timestamp'}." )",$link);
-          			echo "<br>".$obj->{'amount'};
-          			echo "<br>".$obj->{'timestamp'};
+          				$result2 = mysql_query("SELECT * FROM payments WHERE id=1",$link);
+          				while($row2 = mysql_fetch_assoc($result2)) {
+          					if ($row2['times'] == $obj->{'timestamp'})
+          					{
+								   echo "Не внесли!";
+							}
+							else
+								{
+          						   mysql_query("INSERT INTO payments (user_id, amount_pay, times) VALUES (1, ".$obj->{'amount'}.",".$obj->{'timestamp'}." )",$link);
+          						   echo "Внесли!";
+								}
+						}
       	  			}
  		  }
           /*

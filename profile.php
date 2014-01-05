@@ -118,7 +118,16 @@ $user_id = $_SESSION['id'];
             <div class="form-group">
               <label class="col-sm-2 control-label">Balance USD</label>
               <div class="col-sm-10">
-                <p class="form-control-static">10000</p>
+                <p class="form-control-static">
+                <?php
+                if (!$link) $loginerr .="Не удалось соединиться с БД";
+                mysql_select_db('nxt', $link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                while($row = mysql_fetch_assoc($result)) {
+                  echo $row['balance_usd'];
+                }
+                ?>
+                </p>
               </div>
             </div>
           </form>
@@ -129,10 +138,9 @@ $user_id = $_SESSION['id'];
               <div class="col-sm-10">
                 <p class="form-control-static">
                 <?php
-                $link = mysql_connect('localhost','root','powerboard35');
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
                 mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=1",$link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
                 while($row = mysql_fetch_assoc($result)) {
                   echo $row['balance_nxt'];
                 }

@@ -7,6 +7,7 @@ if(isset($_SESSION['user']))
 else{
   header ("location: index.php");
 }
+$user_id = $_SESSION['id'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -30,7 +31,7 @@ else{
                 $link = mysql_connect('localhost','root','0rSo%232fzq12');
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
                 mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=1",$link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
                 while($row = mysql_fetch_assoc($result)) {
                     echo $row['name'];
                 }
@@ -40,7 +41,7 @@ else{
                 <?php
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
                 mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=1",$link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
                 while($row = mysql_fetch_assoc($result)) {
                 echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
                 /*
@@ -53,7 +54,7 @@ else{
                         //<li><a href="#"><span class="glyphicon glyphicon-globe"></span> <span class="label label-default">
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
                 mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=1",$link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
                 while($row = mysql_fetch_assoc($result)) {
                 echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
                 /*
@@ -76,10 +77,22 @@ else{
                     }
                 */          
                 }
+
+                if (!$link) $loginerr .="Не удалось соединиться с БД";
+                mysql_select_db('nxt', $link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                while($row = mysql_fetch_assoc($result)) {
+                echo("<li><a href='history.php?id=".$row['id']."'><span class='glyphicon glyphicon-list'></span> ");
+                /*
+                  Получаем баланс пользователя с кошелька USD
+                */
+                    echo "History";
+                }
+                echo("</a></li>"); 
                 ?>                          
                         </span></a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-off"></span> Exit</a></li>
+                        <li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Exit</a></li>
                     </ul>
             </li>
         </ul>

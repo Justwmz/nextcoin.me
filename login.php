@@ -11,6 +11,8 @@ if (isset($_POST['login'])) {
     if (!$link) $loginerr .="Не удалось соединиться с БД";
     mysql_select_db('nxt', $link);
     $res = mysql_query("SELECT * FROM users WHERE name='$login'AND password='$passwordHash'", $link);
+    $res2 = mysql_query("SELECT * FROM users WHERE name='$login'", $link);
+    while($row = mysql_fetch_assoc($res2)) {
     // Есть ли пользователь с таким логином?
     if (mysql_num_rows($res) < 1) { 
        $loginerr.="Такого пользователя нет, или пароль не верный!";mysql_close($link);
@@ -22,16 +24,13 @@ if (isset($_POST['login'])) {
         // Стартуем сессию и записываем логин в суперглобальный массив $_SESSION
         session_start();
         $_SESSION['user'] = $login;
+        $_SESSION['id'] = $row['id'];
         mysql_close($link);
+
         // Если определена страница с которой мы пришли,
         // на нее и переадресуем, либо на главную
         header ("location: main.php");
-        /*if (isset($_SERVER['HTTP_REFERER'])) {
-        header ("location: ".$_SERVER['HTTP_REFERER']);
         }
-        else {
-        header ("location: index.php");
-        }*/
     }    
 }
 ?>

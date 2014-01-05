@@ -15,8 +15,9 @@ foreach ($Item['transactionIds'] as $a) {
                 while($row = mysql_fetch_assoc($result)) {
 
           			if($obj->{'sender'} == $row['wallet_nxt'] ){
+					mysql_query("INSERT INTO payments (user_id, amount_pay, times) VALUES (1, ".$obj->{'amount'}.",".$obj->{'timestamp'}." )",$link);
           			echo "<br>".$obj->{'amount'};
-          			//echo "<br>".$obj->{'sender'};
+          			echo "<br>".$obj->{'timestamp'};
       	  			}
  		  }
           /*

@@ -101,7 +101,7 @@ include 'functions.php';
           <table class="table table-bordered">
             <tr>
               <td>
-                <legend><center>Sell</center></legend>
+                <legend><center>Sell NXT</center></legend>
                 <form class="form-horizontal" role="form">
                   <div class="form-group">
                     <label for="inputAmount3" class="col-sm-2 control-label">Amount</label>
@@ -129,7 +129,7 @@ include 'functions.php';
           <table class="table table-bordered">
             <tr>
               <td>
-                <legend><center>Buy</center></legend>
+                <legend><center>Buy NXT</center></legend>
                 <form class="form-horizontal" role="form">
                   <div class="form-group">
                     <label for="inputAmount3" class="col-sm-2 control-label">Amount</label>

@@ -1,4 +1,6 @@
 <?php
+//ini_set('display_errors',1);
+//error_reporting(E_ALL);
 session_start();
 if(isset($_SESSION['user']))
 {
@@ -8,6 +10,7 @@ else{
   header ("location: index.php");
 }
 $user_id = $_SESSION['id'];
+include 'functions.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -52,31 +55,13 @@ $user_id = $_SESSION['id'];
                 }
                 echo("</span></a></li>");   
 
-                        //<li><a href="#"><span class="glyphicon glyphicon-globe"></span> <span class="label label-default">
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
                 mysql_select_db('nxt', $link);
                 $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
                 while($row = mysql_fetch_assoc($result)) {
                 echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
-                /*
-                  1.Получаем баланс пользователя с кошелька NXT
-                  2.Отключено по мере не надобности(Информация о балансе)
-                */
-                //$url = "http://localhost:7874/nxt?requestType=getBalance&account=".$row['wallet_nxt']."";
-                //$json = file_get_contents($url);
-                //$obj = json_decode($json);
-                //print $obj->{'balance'}/100;
-                echo $row['balance_nxt'];
-                /*
-                  Выключено до выяснения места установки
-                  if ($row['balance_nxt'] == 0)
-                    {
-                      echo("<div class='alert alert-warning alert-dismissable'>");
-                          echo("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
-                          echo("<strong>Warning!</strong> Best check yo self, you're not looking too good.");
-                      echo("</div>");
-                    }
-                */          
+                $balance = getBalance($user_id);
+                echo $balance;        
                 }
 
                 if (!$link) $loginerr .="Не удалось соединиться с БД";

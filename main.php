@@ -158,6 +158,12 @@ include 'functions.php';
         <div class="col-md-6">
           <table class="table table-bordered">
           <legend><center>Sell Orders</center></legend>
+          <p><b>Min Price: 
+          <?php
+                $prices = minPriceSell();
+                echo round($prices,4);
+          ?>
+          </b></p>
             <tr>
               <td>Price</td>
               <td>Amount</td>
@@ -192,6 +198,12 @@ include 'functions.php';
         <div class="col-md-6">
           <table class="table table-bordered">
           <legend><center>Buy Orders</center></legend>
+          <p><b>Min Price: 
+          <?php
+                $priceb = minPriceBuy();
+                echo round($priceb,4);
+          ?>
+          </b></p>
             <tr>
               <td>Price</td>
               <td>Amount</td>

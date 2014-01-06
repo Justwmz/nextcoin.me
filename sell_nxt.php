@@ -112,7 +112,7 @@ include 'functions.php';
       </div>
     </div>
 
-    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/jquery-1.9.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
   </body>
 </html>

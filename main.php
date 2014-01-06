@@ -167,15 +167,24 @@ include 'functions.php';
 /*
   Устанавливаем соединение с базой , после чего вытаскиваем данные.
 */
-    if (!$link) $loginerr .="Не удалось соединиться с БД";
-    mysql_select_db('nxt', $link);
+    			if (!$link) $loginerr .="Не удалось соединиться с БД";
+    			mysql_select_db('nxt', $link);
                 $result = mysql_query("SELECT * FROM orders",$link);
                 while($row = mysql_fetch_assoc($result)) {
-                  echo("<tr>");
-                  echo("<td>".$row['price']."</td>");
-                  echo("<td>".$row['amount']."</td>");
-                  echo("<td>".$row['usd']."</td>");
-                  echo("</tr>");
+                	if($row['status'] == 0){
+                  		echo("<tr class='danger'>");
+                  		echo("<td>".$row['price']."</td>");
+                  		echo("<td>".$row['amount']."</td>");
+                  		echo("<td>".$row['usd']."</td>");
+                  		echo("</tr>");
+                   }
+                   else{
+                  		echo("<tr class='success'>");
+                  		echo("<td>".$row['price']."</td>");
+                  		echo("<td>".$row['amount']."</td>");
+                  		echo("<td>".$row['usd']."</td>");
+                  		echo("</tr>");                   	
+                   }
                 }
 ?>
           </table>
@@ -188,21 +197,30 @@ include 'functions.php';
               <td>Amount</td>
               <td>USD</td>
             </tr>
-<?php
+				<?php
 /*
   Устанавливаем соединение с базой , после чего вытаскиваем данные.
 */
-    if (!$link) $loginerr .="Не удалось соединиться с БД";
-    mysql_select_db('nxt', $link);
+    			if (!$link) $loginerr .="Не удалось соединиться с БД";
+    			mysql_select_db('nxt', $link);
                 $result = mysql_query("SELECT * FROM orderb",$link);
                 while($row = mysql_fetch_assoc($result)) {
-                  echo("<tr>");
-                  echo("<td>".$row['price']."</td>");
-                  echo("<td>".$row['amount']."</td>");
-                  echo("<td>".$row['usd']."</td>");
-                  echo("</tr>");
+                	if($row['status'] == 0){
+                  		echo("<tr class='danger'>");
+                  		echo("<td>".$row['price']."</td>");
+                  		echo("<td>".$row['amount']."</td>");
+                  		echo("<td>".$row['usd']."</td>");
+                  		echo("</tr>");
+                   }
+                   else{
+                  		echo("<tr class='success'>");
+                  		echo("<td>".$row['price']."</td>");
+                  		echo("<td>".$row['amount']."</td>");
+                  		echo("<td>".$row['usd']."</td>");
+                  		echo("</tr>");                   	
+                   }
                 }
-?>
+				?>
           </table>
         </div>
      </div>

@@ -102,22 +102,23 @@ include 'functions.php';
             <tr>
               <td>
                 <legend><center>Sell NXT</center></legend>
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" role="form" method="POST" action="sell_nxt.php">
                   <div class="form-group">
                     <label for="inputAmount3" class="col-sm-2 control-label">Amount</label>
                       <div class="col-sm-8">
-                       <input type="text" class="form-control" id="inputAmount3" placeholder="Amount">
+                       <input type="text" class="form-control" id="inputAmount3" placeholder="Amount" name="amount">
                       </div>
                   </div>
                     <div class="form-group">
                       <label for="inputPrice" class="col-sm-2 control-label">Price</label>
                         <div class="col-sm-8">
-                          <input type="text" class="form-control" id="inputPrice3" placeholder="Price">
+                          <input type="text" class="form-control" id="inputPrice3" placeholder="Price" name="price">
                         </div>
                     </div>
                           <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                               <button type="submit" class="btn btn-primary">Sell NXT</button>
+                              <button type="button" class="btn btn-danger">Calculate</button>
                             </div>
                           </div>
                   </form>
@@ -146,6 +147,7 @@ include 'functions.php';
                           <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                               <button type="submit" class="btn btn-primary">Buy NXT</button>
+                              <button type="button" class="btn btn-danger">Calculate</button>
                             </div>
                           </div>
                   </form>
@@ -171,7 +173,7 @@ include 'functions.php';
             </tr>
 <?php
 /*
-  Устанавливаем соединение с базой , после чего вытаскиваем данные.
+  Устанавливаем соединение с базой , после чего вытаскиваем данные и проверяем статус.
 */
     			if (!$link) $loginerr .="Не удалось соединиться с БД";
     			mysql_select_db('nxt', $link);
@@ -211,7 +213,7 @@ include 'functions.php';
             </tr>
 				<?php
 /*
-  Устанавливаем соединение с базой , после чего вытаскиваем данные.
+  Устанавливаем соединение с базой , после чего вытаскиваем данные и проверяем статус.
 */
     			if (!$link) $loginerr .="Не удалось соединиться с БД";
     			mysql_select_db('nxt', $link);

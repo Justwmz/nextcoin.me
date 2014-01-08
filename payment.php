@@ -114,7 +114,7 @@ $description="Deposit"; //забираем значение из POST
 		<merchant_id>$merchant_id</merchant_id>
 		<order_id>$order_id</order_id>
 		<amount>$amount</amount>
-		<currency>USD</currency>
+		<currency>UAH</currency>
 		<description>$description</description>
 		<default_phone>$phone</default_phone>
 		<pay_way>$method</pay_way> 

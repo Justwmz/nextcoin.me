@@ -129,7 +129,7 @@ $description="Deposit"; //забираем значение из POST
 
 echo("<form action='$url' method='POST'>
       <input type='hidden' name='operation_xml' value='$xml_encoded' />
-      <input type='hidden' name='signature' value='$signature' />
+      <input type='hidden' name='signature' value='$lqsignature' />
 	<input type='submit' class='btn btn-primary' value='Pay'/>
 	</form>");
 ?>

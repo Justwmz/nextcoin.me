@@ -26,7 +26,7 @@ include 'functions.php';
 	function validate_form ( )
 	{
 		valid = true;
-		
+
 	        if(document.sell_nxt.amount.value < 100)
 	        {
 	        		//alert ( "Amount can't be less 100 and empty." );
@@ -53,6 +53,12 @@ include 'functions.php';
 
 	
 	        return valid;
+	}
+
+	function calculate()
+	{
+		document.getElementById('label_sell').style.display = 'block';
+		document.getElementById('res').innerHTML = document.sell_nxt.amount.value * document.sell_nxt.price.value;
 	}
 	
 	//-->
@@ -159,11 +165,17 @@ include 'functions.php';
                         <div class="col-sm-8">
                           <input type="text" class="form-control" id="inputPrice3" placeholder="Price" name="price">
                         </div>
-                    </div>
+                     </div>
+                     <div id="label_sell" style="display: none;" class="form-group">
+                      <label class="col-sm-2 control-label">Total:</label>
+                        <div class="col-sm-8">
+                          <p id="res" class="form-control-static"></p>
+                        </div>
+                     </div>
                           <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                               <button type="submit" class="btn btn-primary">Sell NXT</button>
-                              <button type="button" class="btn btn-danger" disabled="disabled">Calculate</button>
+                              <button type="button" class="btn btn-danger" onclick="calculate();">Calculate</button>
                             </div>
                           </div>
                   </form>

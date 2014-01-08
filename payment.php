@@ -101,7 +101,7 @@ include 'functions.php';
 $merchant_id='i2561340926';
 $signature="AxRHfIvLd80V1Tr9vHdjf2mN7XQpHPvwGEKOFXbh";
 $url="https://www.liqpay.com/?do=clickNbuy";
-$method='delayed, card, liqpay';
+$method='';
 $phone='+380634006813';
 $order_id=date("d/m/Y-H:i:s"); //id заказа
 $amount=$_POST['amount']; //забираем значение из POST //вместо amount

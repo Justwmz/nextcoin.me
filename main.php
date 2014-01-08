@@ -20,6 +20,26 @@ include 'functions.php';
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript">
+	<!--
+	
+	function validate_form ( )
+	{
+		valid = true;
+	
+	        if ( document.sell_nxt.amount.value < 100 &&  document.sell_nxt.amount.value == "")
+	        {
+	                alert ( "Amount can't be less 100 and empty." );
+	                document.sell_nxt.amount.focus();
+	                valid = false;
+	        }
+
+	
+	        return valid;
+	}
+	
+	//-->
+	</script>
 
     </head>
 <body>
@@ -102,7 +122,7 @@ include 'functions.php';
             <tr>
               <td>
                 <legend><center>Sell NXT</center></legend>
-                <form class="form-horizontal" role="form" method="POST" action="sell_nxt.php">
+                <form name="sell_nxt" class="form-horizontal" role="form" method="POST" action="sell_nxt.php" onsubmit="return validate_form ( );">
                   <div class="form-group">
                     <label for="inputAmount3" class="col-sm-2 control-label">Amount</label>
                       <div class="col-sm-8">

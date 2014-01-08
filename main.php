@@ -20,6 +20,8 @@ include 'functions.php';
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript">
 	<!--
 	
@@ -296,7 +298,5 @@ include 'functions.php';
         </div>
      </div>
     </div>
-    <script src="js/jquery-1.9.1.js"></script>
-    <script src="js/bootstrap.min.js"></script>
   </body>
 </html>

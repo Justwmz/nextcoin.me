@@ -26,12 +26,28 @@ include 'functions.php';
 	function validate_form ( )
 	{
 		valid = true;
+		
+	        if(document.sell_nxt.amount.value < 100)
+	        {
+	        		//alert ( "Amount can't be less 100 and empty." );
+	                document.getElementById('sell_alert').style.display = 'block';
+	                document.sell_nxt.amount.focus();
+	                valid = false;
+	        }
 	
-	        if ( document.sell_nxt.amount.value < 100 &&  document.sell_nxt.amount.value == "")
+	        if (document.sell_nxt.amount.value == "")
 	        {
 	                //alert ( "Amount can't be less 100 and empty." );
 	                document.getElementById('sell_alert').style.display = 'block';
 	                document.sell_nxt.amount.focus();
+	                valid = false;
+	        }
+
+	       	if(document.sell_nxt.price.value == "")
+	        {
+	        		//alert ( "Amount can't be less 100 and empty." );
+	                document.getElementById('price_alert').style.display = 'block';
+	                document.sell_nxt.price.focus();
 	                valid = false;
 	        }
 
@@ -126,6 +142,10 @@ include 'functions.php';
                 	<div id ="sell_alert" style="display: none;" class="alert alert-danger">
                 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 		Amount can't be less 100 and empty!
+                	</div>
+                	<div id ="price_alert" style="display: none;" class="alert alert-danger">
+                		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                		Price can't be empty!
                 	</div>
                 <form name="sell_nxt" class="form-horizontal" role="form" method="POST" action="sell_nxt.php" onsubmit="return validate_form ( );">
                   <div class="form-group">

@@ -23,8 +23,7 @@ include 'functions.php';
     <script src="js/jquery-1.9.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript">
-	<!--
-	
+	<!--	
 	function validate_form ( )
 	{
 		valid = true;
@@ -61,8 +60,7 @@ include 'functions.php';
 	{
 		document.getElementById('label_sell').style.display = 'block';
 		document.getElementById('res').innerHTML = document.sell_nxt.amount.value * document.sell_nxt.price.value;
-	}
-	
+	}	
 	//-->
 	</script>
 

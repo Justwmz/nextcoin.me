@@ -8,7 +8,6 @@ else{
   header ("location: index.php");
 }
 $user_id = $_SESSION['id'];
-include 'functions.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -16,8 +15,6 @@ include 'functions.php';
     <title>NextCoin.me | Main Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-    <script src="js/jquery-1.9.1.js"></script>
-    <script src="js/bootstrap.min.js"></script>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     </head>
@@ -54,13 +51,31 @@ include 'functions.php';
                 }
                 echo("</span></a></li>");   
 
+                        //<li><a href="#"><span class="glyphicon glyphicon-globe"></span> <span class="label label-default">
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
                 mysql_select_db('nxt', $link);
                 $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
                 while($row = mysql_fetch_assoc($result)) {
                 echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
-                $balance = getBalance($user_id);
-                echo $balance;        
+                /*
+                  1.Получаем баланс пользователя с кошелька NXT
+                  2.Отключено по мере не надобности(Информация о балансе)
+                */
+                //$url = "http://localhost:7874/nxt?requestType=getBalance&account=".$row['wallet_nxt']."";
+                //$json = file_get_contents($url);
+                //$obj = json_decode($json);
+                //print $obj->{'balance'}/100;
+                echo $row['balance_nxt'];
+                /*
+                  Выключено до выяснения места установки
+                  if ($row['balance_nxt'] == 0)
+                    {
+                      echo("<div class='alert alert-warning alert-dismissable'>");
+                          echo("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+                          echo("<strong>Warning!</strong> Best check yo self, you're not looking too good.");
+                      echo("</div>");
+                    }
+                */          
                 }
 
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
@@ -74,7 +89,7 @@ include 'functions.php';
                     echo "History";
                 }
                 echo("</a></li>"); 
-                ?>                         
+                ?>                          
                         </span></a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
                         <li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Exit</a></li>
@@ -82,11 +97,11 @@ include 'functions.php';
             </li>
         </ul>
         <div class="navbar-header">
-          <a class="navbar-brand" href="main.php">NextCoin.me</a>
+          <a class="navbar-brand" href="#">NextCoin.me</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="main.php">Home</a></li>
+            <li class="active"><a href="#">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#faq">FAQ</a></li>
             <li><a href="#contact">Contact</a></li>
@@ -96,49 +111,20 @@ include 'functions.php';
     </div>
     <div class="container" style="padding-top: 70px">
       <div class="row">
-        <div class="col-md-6">
-          <form class="form-horizontal" role="form" method="POST" action="deposit_usd.php">
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Balance USD</label>
-              <div class="col-sm-10">
-                <p class="form-control-static">
-                <?php
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                  echo $row['balance_usd'];
-                }
-                ?>
-                </p>
-              </div>
-            </div>
+        <div class="col-md-4">
+            <form role="form" method="POST" action="payment.php">
               <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary">Deposit USD</button>
-                </div>
+                <label for="Amount">Amount</label>
+                <input type="text" class="form-control" id="Amount" placeholder="Amount" name="amount">
               </div>
-          </form>
-          <br>
-          <form class="form-horizontal" role="form" action="deposit_nxt.php"> 
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Balance NXT</label>
-              <div class="col-sm-10">
-                <p class="form-control-static">
-                <?php
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                  echo $row['balance_nxt'];
-                }
-                ?>
-                </p>
-              </div> 
-            </div>
-          </form>                
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
       </div>
-    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
   </body>
 </html>

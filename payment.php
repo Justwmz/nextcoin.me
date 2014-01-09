@@ -109,8 +109,8 @@ $description="Deposit"; //забираем значение из POST
 
 	$xml="<request>      
 		<version>1.2</version>
-		<result_url>https://nextcoin.me/payment.php</result_url>
-		<server_url>https://nextcoin.me/payment.php</server_url>
+		<result_url>https://nextcoin.me/payment_answer.php</result_url>
+		<server_url>https://nextcoin.me/payment_answer.php</server_url>
 		<merchant_id>$merchant_id</merchant_id>
 		<order_id>$order_id</order_id>
 		<amount>$amount</amount>

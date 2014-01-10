@@ -9,6 +9,7 @@ else{
 }
 $user_id = $_SESSION['id'];
 include 'functions.php';
+include 'deposit_nxt.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,6 +21,14 @@ include 'functions.php';
     <script src="js/bootstrap.min.js"></script>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+        <script type="text/javascript">
+	<!--	
+  function deposit_alert()
+  {
+    document.getElementById('deposit_nxt_alert').style.display = 'block';
+  }
+	//-->
+	</script>
     </head>
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -203,11 +212,15 @@ include 'functions.php';
                 }
                 ?>
                 </p>
-              </div> 
+              </div>
             </div>
+                    <div id ="deposit_nxt_alert" style="display: none;" class="alert alert-info">
+                		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                		For deposit to your balance pls send your NXT to wallet <b>16170476679432333849</b>
+                	</div> 
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary">Deposit NXT</button>
+                  <button type="button" class="btn btn-primary" onclick="deposit_alert();">Deposit NXT</button>
                 </div>
               </div>
           </form>                

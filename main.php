@@ -11,6 +11,7 @@ else{
 }
 $user_id = $_SESSION['id'];
 include 'functions.php';
+include 'deposit_nxt.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -56,11 +57,17 @@ include 'functions.php';
 	        return valid;
 	}
 
-	function calculate()
+	function calculate_sell()
 	{
 		document.getElementById('label_sell').style.display = 'block';
-		document.getElementById('res').innerHTML = document.sell_nxt.amount.value * document.sell_nxt.price.value;
+		document.getElementById('res_sell').innerHTML = document.sell_nxt.amount.value * document.sell_nxt.price.value;
 	}	
+
+  function calculate_buy()
+  {
+    document.getElementById('label_buy').style.display = 'block';
+    document.getElementById('res_buy').innerHTML = document.buy_nxt.amount.value * document.buy_nxt.price.value;
+  }
 	//-->
 	</script>
 
@@ -169,13 +176,13 @@ include 'functions.php';
                      <div id="label_sell" style="display: none;" class="form-group">
                       <label class="col-sm-2 control-label">Total:</label>
                         <div class="col-sm-8">
-                          <p id="res" class="form-control-static"></p>
+                          <p id="res_sell" class="form-control-static"></p>
                         </div>
                      </div>
                           <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                               <button type="submit" class="btn btn-primary">Sell NXT</button>
-                              <button type="button" class="btn btn-danger" onclick="calculate();">Calculate</button>
+                              <button type="button" class="btn btn-danger" onclick="calculate_sell();">Calculate</button>
                             </div>
                           </div>
                   </form>
@@ -188,23 +195,29 @@ include 'functions.php';
             <tr>
               <td>
                 <legend><center>Buy NXT</center></legend>
-                <form class="form-horizontal" role="form">
+                <form name="buy_nxt" class="form-horizontal" role="form">
                   <div class="form-group">
                     <label for="inputAmount3" class="col-sm-2 control-label">Amount</label>
                       <div class="col-sm-8">
-                       <input type="text" class="form-control" id="inputAmount3" placeholder="Amount">
+                       <input type="text" class="form-control" id="buyAmount" placeholder="Amount" name="amount">
                       </div>
                   </div>
                     <div class="form-group">
                       <label for="inputPrice" class="col-sm-2 control-label">Price</label>
                         <div class="col-sm-8">
-                          <input type="text" class="form-control" id="inputPrice3" placeholder="Price">
+                          <input type="text" class="form-control" id="buyPrice" placeholder="Price" name="price">
                         </div>
                     </div>
+                     <div id="label_buy" style="display: none;" class="form-group">
+                      <label class="col-sm-2 control-label">Total:</label>
+                        <div class="col-sm-8">
+                          <p id="res_buy" class="form-control-static"></p>
+                        </div>
+                     </div>
                           <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                               <button type="submit" class="btn btn-primary" disabled="disabled">Buy NXT</button>
-                              <button type="button" class="btn btn-danger" disabled="disabled">Calculate</button>
+                              <button type="button" class="btn btn-danger" onclick="calculate_buy();">Calculate</button>
                             </div>
                           </div>
                   </form>
@@ -257,9 +270,9 @@ include 'functions.php';
         <div class="col-md-6">
           <table class="table table-bordered">
           <legend><center>Buy Orders</center></legend>
-          <p><b>Min Price: 
+          <p><b>Max Price: 
           <?php
-                $priceb = minPriceBuy();
+                $priceb = maxPriceBuy();
                 echo round($priceb,4);
           ?>
           </b></p>

@@ -11,13 +11,13 @@ function getBalance($user_id){
                 }
 }
 
-function minPriceBuy(){
+function maxPriceBuy(){
                 $link = mysql_connect('localhost','root','0rSo%232fzq12');
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
                 mysql_select_db('nxt', $link);
                 $result = mysql_query("SELECT * FROM orderb",$link);
                 while($row = mysql_fetch_assoc($result)){
-                	$sum = mysql_query("SELECT MIN(price) FROM orderb");
+                	$sum = mysql_query("SELECT MAX(price) FROM orderb");
                 	$priceb = mysql_result($sum, 0);
                 return $priceb;	
 	}

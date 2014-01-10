@@ -96,6 +96,75 @@ include 'functions.php';
     </div>
     <div class="container" style="padding-top: 70px">
       <div class="row">
+      		<div class="col-md-6">
+				<form class="form-horizontal" role="form">
+  					<div class="form-group">
+  					  <label for="inputEmail3" class="col-sm-2 control-label">Username:</label>
+  					  <div class="col-sm-10">
+  					    <p class="form-control-static">
+                			<?php
+                			if (!$link) $loginerr .="Не удалось соединиться с БД";
+                			mysql_select_db('nxt', $link);
+                			$result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                			while($row = mysql_fetch_assoc($result)) {
+                			  echo $row['name'];
+                			}
+                			?>  					    	
+  					    </p>
+  					  </div>
+  					</div>
+  					<div class="form-group">
+  					  <label for="inputPassword3" class="col-sm-2 control-label">E-mail:</label>
+  					  <div class="col-sm-10">
+  					    <p class="form-control-static">
+                			<?php
+                			if (!$link) $loginerr .="Не удалось соединиться с БД";
+                			mysql_select_db('nxt', $link);
+                			$result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                			while($row = mysql_fetch_assoc($result)) {
+                			  echo $row['email'];
+                			}
+                			?>  		  					    	
+  					    </p>
+  					  </div>
+ 					 </div>
+  					<div class="form-group">
+  					  <label for="inputEmail3" class="col-sm-2 control-label">Group:</label>
+  					  <div class="col-sm-10">
+  					    <p class="form-control-static">
+                			<?php
+                			if (!$link) $loginerr .="Не удалось соединиться с БД";
+                			mysql_select_db('nxt', $link);
+                			$result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                			while($row = mysql_fetch_assoc($result)) {
+                			  echo $row['group'];
+                			}
+                			?>  					    	
+  					    </p>
+  					  </div>
+  					</div>
+  					<div class="form-group">
+  					  <label for="inputEmail3" class="col-sm-2 control-label">NXT Wallet:</label>
+  					  <div class="col-sm-10">
+  					    <p class="form-control-static">
+                			<?php
+                			if (!$link) $loginerr .="Не удалось соединиться с БД";
+                			mysql_select_db('nxt', $link);
+                			$result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                			while($row = mysql_fetch_assoc($result)) {
+                			  echo $row['wallet_nxt'];
+                			}
+                			?>  					    	
+  					    </p>
+  					  </div>
+  					</div>
+              			<div class="form-group">
+              			  <div class="col-sm-offset-2 col-sm-10">
+              			    <button type="submit" class="btn btn-danger" disabled="disabled">Change</button>
+              			  </div>
+              			</div>
+				</form>
+      		</div>
         <div class="col-md-6">
           <form class="form-horizontal" role="form" method="POST" action="deposit_usd.php">
             <div class="form-group">
@@ -120,7 +189,7 @@ include 'functions.php';
               </div>
           </form>
           <br>
-          <form class="form-horizontal" role="form" action="deposit_nxt.php"> 
+          <form class="form-horizontal" role="form" action=""> 
             <div class="form-group">
               <label class="col-sm-2 control-label">Balance NXT</label>
               <div class="col-sm-10">
@@ -130,12 +199,17 @@ include 'functions.php';
                 mysql_select_db('nxt', $link);
                 $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
                 while($row = mysql_fetch_assoc($result)) {
-                  echo $row['balance_nxt'];
+                  echo $balance;
                 }
                 ?>
                 </p>
               </div> 
             </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-primary">Deposit NXT</button>
+                </div>
+              </div>
           </form>                
         </div>
       </div>

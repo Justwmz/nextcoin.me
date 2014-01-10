@@ -76,6 +76,32 @@ include 'deposit_nxt.php';
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <ul class="nav navbar-nav navbar-right">
+        <?php
+                if (!$link) $loginerr .="Не удалось соединиться с БД";
+                mysql_select_db('nxt', $link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                while($row = mysql_fetch_assoc($result)) {
+                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
+                /*
+                  Получаем баланс пользователя с кошелька USD
+                */
+                    echo $row['balance_usd'];
+                }
+                echo("</span></a></li>");
+
+                if (!$link) $loginerr .="Не удалось соединиться с БД";
+                mysql_select_db('nxt', $link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                while($row = mysql_fetch_assoc($result)) {
+                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
+                $balance = getBalance($user_id);
+                /*
+                  Получаем баланс пользователя в NXT
+                */
+                echo $balance;        
+                } 
+                echo("</span></a></li>");         
+        ?>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
                 <?php
@@ -93,27 +119,6 @@ include 'deposit_nxt.php';
                 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                 <?php
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
-                /*
-                  Получаем баланс пользователя с кошелька USD
-                */
-                    echo $row['balance_usd'];
-                }
-                echo("</span></a></li>");   
-
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
-                $balance = getBalance($user_id);
-                echo $balance;        
-                }
-
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
                 mysql_select_db('nxt', $link);
                 $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
@@ -138,14 +143,55 @@ include 'deposit_nxt.php';
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="main.php">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#faq">FAQ</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about" data-toggle="modal" data-target="#about">About</a></li>         
+            <li><a href="#faq" data-toggle="modal" data-target="#faq">FAQ</a></li>
+            <li><a href="#contact" data-toggle="modal" data-target="#contact">Contact</a></li>
           </ul>
         </div><!--/.navbar-collapse -->
       </div>
     </div>
     <div class="container" style="padding-top: 70px">
+    	<div class="row">
+    		<div class="col-md-12">
+          			<table class="table table-bordered">
+          			  <tr>
+          			    <td>
+          			      <legend>Lates News</legend>
+							<div class="panel-group" id="accordion">
+							  <div class="panel panel-default">
+							    <div class="panel-heading">
+							      <h4 class="panel-title">
+							        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+							          <b>10.01.2014</b> [Pre Alhpa Test so soon]
+							        </a>
+							      </h4>
+							    </div>
+							    <div id="collapseOne" class="panel-collapse collapse">
+							      <div class="panel-body">
+							        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+							      </div>
+							    </div>
+							  </div>
+							  <div class="panel panel-default">
+							    <div class="panel-heading">
+							      <h4 class="panel-title">
+							        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+							          <b>08.01.2014</b> [Testing many new functions]
+							        </a>
+							      </h4>
+							    </div>
+							    <div id="collapseTwo" class="panel-collapse collapse">
+							      <div class="panel-body">
+							        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+							      </div>
+							    </div>
+							  </div>
+							</div>
+         			     </td>
+         			   </tr>
+         			</table>
+    		</div>
+    	</div>
       <div class="row">
         <div class="col-md-6">
           <table class="table table-bordered">
@@ -309,5 +355,47 @@ include 'deposit_nxt.php';
         </div>
      </div>
     </div>
+	<!-- Modal -->
+	<div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">About</h4>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!-- Modal -->
+	<div class="modal fade" id="faq" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">FAQ</h4>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!-- Modal -->
+	<div class="modal fade" id="contact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">Contact</h4>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
   </body>
 </html>

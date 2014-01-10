@@ -8,11 +8,13 @@ else{
   header ("location: index.php");
 }
 $user_id = $_SESSION['id'];
+include 'functions.php';
+include 'deposit_nxt.php';
 ?>
 <!DOCTYPE html>
 <html>
   <head>
-    <title>NextCoin.me | Main Page</title>
+    <title>NextCoin.me | Deposit USD</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <!-- Bootstrap -->
@@ -22,6 +24,32 @@ $user_id = $_SESSION['id'];
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <ul class="nav navbar-nav navbar-right">
+        <?php
+                if (!$link) $loginerr .="Не удалось соединиться с БД";
+                mysql_select_db('nxt', $link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                while($row = mysql_fetch_assoc($result)) {
+                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
+                /*
+                  Получаем баланс пользователя с кошелька USD
+                */
+                    echo $row['balance_usd'];
+                }
+                echo("</span></a></li>");
+
+                if (!$link) $loginerr .="Не удалось соединиться с БД";
+                mysql_select_db('nxt', $link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                while($row = mysql_fetch_assoc($result)) {
+                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
+                $balance = getBalance($user_id);
+                /*
+                  Получаем баланс пользователя в NXT
+                */
+                echo $balance;        
+                } 
+                echo("</span></a></li>");         
+        ?>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
                 <?php
@@ -43,45 +71,6 @@ $user_id = $_SESSION['id'];
                 mysql_select_db('nxt', $link);
                 $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
                 while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
-                /*
-                  Получаем баланс пользователя с кошелька USD
-                */
-                    echo $row['balance_usd'];
-                }
-                echo("</span></a></li>");   
-
-                        //<li><a href="#"><span class="glyphicon glyphicon-globe"></span> <span class="label label-default">
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
-                /*
-                  1.Получаем баланс пользователя с кошелька NXT
-                  2.Отключено по мере не надобности(Информация о балансе)
-                */
-                //$url = "http://localhost:7874/nxt?requestType=getBalance&account=".$row['wallet_nxt']."";
-                //$json = file_get_contents($url);
-                //$obj = json_decode($json);
-                //print $obj->{'balance'}/100;
-                echo $row['balance_nxt'];
-                /*
-                  Выключено до выяснения места установки
-                  if ($row['balance_nxt'] == 0)
-                    {
-                      echo("<div class='alert alert-warning alert-dismissable'>");
-                          echo("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
-                          echo("<strong>Warning!</strong> Best check yo self, you're not looking too good.");
-                      echo("</div>");
-                    }
-                */          
-                }
-
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
                 echo("<li><a href='history.php?id=".$row['id']."'><span class='glyphicon glyphicon-list'></span> ");
                 /*
                   Получаем баланс пользователя с кошелька USD
@@ -89,7 +78,7 @@ $user_id = $_SESSION['id'];
                     echo "History";
                 }
                 echo("</a></li>"); 
-                ?>                          
+                ?>                             
                         </span></a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
                         <li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Exit</a></li>
@@ -101,10 +90,10 @@ $user_id = $_SESSION['id'];
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#faq">FAQ</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="main.php">Home</a></li>
+            <li><a href="#about" data-toggle="modal" data-target="#about">About</a></li>         
+            <li><a href="#faq" data-toggle="modal" data-target="#faq">FAQ</a></li>
+            <li><a href="#contact" data-toggle="modal" data-target="#contact">Contact</a></li>
           </ul>
         </div><!--/.navbar-collapse -->
       </div>
@@ -126,5 +115,47 @@ $user_id = $_SESSION['id'];
 
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
+  <!-- Modal -->
+  <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">About</h4>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="faq" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">FAQ</h4>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="contact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Contact</h4>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
   </body>
 </html>

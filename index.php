@@ -60,6 +60,7 @@
         echo("<label class='checkbox'>");
           echo("<input type='checkbox' value='remember-me'> Remember me</label>");
         echo("<button class='btn btn-lg btn-primary btn-block' type='submit'>Sign in</button>");
+        echo("<a href='register.php' class='btn btn-lg btn-danger btn-block'>Register</a>");
       echo("</form>");
       ?>
 

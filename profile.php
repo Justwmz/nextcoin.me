@@ -14,7 +14,7 @@ include 'deposit_nxt.php';
 <!DOCTYPE html>
 <html>
   <head>
-    <title>NextCoin.me | Main Page</title>
+    <title>NextCoin.me | Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <script src="js/jquery-1.9.1.js"></script>
@@ -194,6 +194,7 @@ include 'deposit_nxt.php';
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                   <button type="submit" class="btn btn-primary">Deposit USD</button>
+                  <button type="button" class="btn btn-danger" disabled="disabled">Withdraw USD</button>
                 </div>
               </div>
           </form>
@@ -221,6 +222,7 @@ include 'deposit_nxt.php';
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                   <button type="button" class="btn btn-primary" onclick="deposit_alert();">Deposit NXT</button>
+                  <a href="withdraw_nxt.php" class="btn btn-danger">Withdraw NXT</a>
                 </div>
               </div>
           </form>                

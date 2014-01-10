@@ -13,7 +13,7 @@ include 'functions.php';
 <!DOCTYPE html>
 <html>
   <head>
-    <title>NextCoin.me | History</title>
+    <title>NextCoin.me | Withdraw NXT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <!-- Bootstrap -->
@@ -95,34 +95,20 @@ include 'functions.php';
     <div class="container" style="padding-top: 70px">
       <div class="row">
         <div class="col-md-8">
-          <table class="table table-bordered">
-          <legend><center>History</center></legend>
-            <tr>
-              <td><b>№</b></td>
-              <td><b>Transaction id</b></td>
-              <td><b>Сonfirmation</b></td>
-            </tr>
-<?php
-/*
-  Устанавливаем соединение с базой , после чего вытаскиваем данные.
-*/
-    if (!$link) $loginerr .="Не удалось соединиться с БД";
-    mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM history",$link);
-                while($row = mysql_fetch_assoc($result)) {
-
-    $url = "http://localhost:7874/nxt?requestType=getTransactionBytes&transaction=".$row['transaction_id']."";
-    $json = file_get_contents($url);
-    $obj = json_decode($json);
-
-                  echo("<tr>");
-                  echo("<td>".$row['id']."</td>");
-                  echo("<td>".$row['transaction_id']."</td>");
-                  echo("<td>".$obj->confirmations."</td>");
-                  echo("</tr>");
-                }
-?>
-          </table>
+          <form class="form-horizontal" role="form" method="POST" action="funct_withdraw_nxt.php">
+          <div class="alert alert-info">Wait please few minutes for procces ended and <b>don't close this page!</b></div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Amount</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" placeholder="Amount" name="amount">
+              </div>
+            </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-primary">Send</button>
+                </div>
+              </div>
+          </form>
         </div>
       </div>
     </div>

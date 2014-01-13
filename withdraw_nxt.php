@@ -25,6 +25,7 @@ include 'deposit_nxt.php';
       <div class="container">
         <ul class="nav navbar-nav navbar-right">
         <?php
+              $link = mysql_connect('localhost','root','0rSo%232fzq12');
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
                 mysql_select_db('nxt', $link);
                 $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
@@ -101,8 +102,9 @@ include 'deposit_nxt.php';
     <div class="container" style="padding-top: 70px">
       <div class="row">
         <div class="col-md-8">
-          <form class="form-horizontal" role="form" method="POST" action="funct_withdraw_nxt.php">
+          <form name="withdraw" class="form-horizontal" role="form" method="POST" action="funct_withdraw_nxt.php" onsubmit="return validate_form ( );">
           <div class="alert alert-info">Wait please few minutes for procces ended and <b>don't close this page!</b></div>
+          <div id ="withdraw_alert" class="alert alert-danger" style="display: none;">Can't be ...</div>
             <div class="form-group">
               <label for="inputEmail3" class="col-sm-2 control-label">Amount</label>
               <div class="col-sm-6">
@@ -111,7 +113,7 @@ include 'deposit_nxt.php';
             </div>
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary">Send</button>
+                  <button type="submit" class="btn btn-primary" disabled="disabled">Send</button>
                 </div>
               </div>
           </form>

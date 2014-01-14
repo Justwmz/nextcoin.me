@@ -222,7 +222,7 @@ include 'deposit_nxt.php';
             </div>
                     <div id ="deposit_nxt_alert" style="display: none;" class="alert alert-info">
                 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                		For deposit to your balance pls send your NXT to wallet <b>16170476679432333849</b>
+                		For deposit to your balance pls send your NXT to wallet <b>13909801773525658690</b>
                 	</div> 
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">

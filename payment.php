@@ -98,40 +98,17 @@ include 'functions.php';
       <div class="row">
         <div class="col-md-8">
 <?php
-$merchant_id='i2561340926';
-$signature="AxRHfIvLd80V1Tr9vHdjf2mN7XQpHPvwGEKOFXbh";
-$url="https://www.liqpay.com/?do=clickNbuy";
-$method='';
-$phone='+380634006813';
-$order_id=date("d/m/Y-H:i:s"); //id заказа
 $amount=$_POST['amount']; //забираем значение из POST //вместо amount
-$description="Deposit"; //забираем значение из POST
-
-	$xml="<request>      
-		<version>1.2</version>
-		<result_url>https://nextcoin.me/payment_answer.php</result_url>
-		<server_url>https://nextcoin.me/payment_answer.php</server_url>
-		<merchant_id>$merchant_id</merchant_id>
-		<order_id>$order_id</order_id>
-		<amount>$amount</amount>
-		<currency>UAH</currency>
-		<description>$description</description>
-		<default_phone>$phone</default_phone>
-		<pay_way>$method</pay_way> 
-		</request>
-		";
-	
-	
-	$xml_encoded = base64_encode($xml); 
-	$lqsignature = base64_encode(sha1($signature.$xml.$signature,1));
-	
 
 
-echo("<form action='$url' method='POST'>
-      <input type='hidden' name='operation_xml' value='$xml_encoded' />
-      <input type='hidden' name='signature' value='$lqsignature' />
-	<input type='submit' class='btn btn-primary' value='Pay'/>
-	</form>");
+echo("<form  method='post' action='https://www.okpay.com/process.html'>
+<input type='hidden' name='ok_receiver' value='v_gaevoy@ukr.net' />
+<input type='hidden' name='ok_item_1_name' value='Deposit' />
+<input type='hidden' name='ok_currency' value='usd' />
+<input type='hidden' name='ok_item_1_type' value='service' />
+<input type='hidden' name='ok_item_1_price' value='".$amount."' />
+<button type='submit' class='btn btn-primary'>Submit</button>
+</form>");
 ?>
         </div>
       </div>

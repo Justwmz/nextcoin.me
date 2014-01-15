@@ -1,5 +1,4 @@
 <?php
-//include 'mysql.php';
 if (isset($_POST['login'])) {
     $passwordHash = md5($_POST['password']);
     $login = $_POST['login']; 
@@ -15,22 +14,23 @@ if (isset($_POST['login'])) {
     while($row = mysql_fetch_assoc($res2)) {
     // Есть ли пользователь с таким логином?
     if (mysql_num_rows($res) < 1) { 
-       $loginerr.="Такого пользователя нет, или пароль не верный!";mysql_close($link);
+       $loginerr.="Такого пользователя нет, или пароль не верный!";
+       mysql_close($link);
        }
     
-    header('Content-Type: text/html; charset= utf-8');
     echo "<b style='color:grey;'>$loginerr</b><br>"; 
     if(!$loginerr) {
-        // Стартуем сессию и записываем логин в суперглобальный массив $_SESSION
         session_start();
+        // Стартуем сессию и записываем логин в суперглобальный массив $_SESSION
         $_SESSION['user'] = $login;
         $_SESSION['id'] = $row['id'];
-        mysql_close($link);
 
-        // Если определена страница с которой мы пришли,
-        // на нее и переадресуем, либо на главную
-        header ("location: main.php");
+            mysql_close($link);
+
+            // Если определена страница с которой мы пришли,
+            // на нее и переадресуем, либо на главную
+            header ("location: main.php");
         }
-    }    
-}
+    }
+}    
 ?>

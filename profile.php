@@ -35,6 +35,7 @@ include 'deposit_nxt.php';
       <div class="container">
         <ul class="nav navbar-nav navbar-right">
         <?php
+                $link = mysql_connect('localhost','root','0rSo%232fzq12');
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
                 mysql_select_db('nxt', $link);
                 $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
@@ -66,7 +67,6 @@ include 'deposit_nxt.php';
                 /*
                   Получаем имя пользователя
                 */
-                $link = mysql_connect('localhost','root','0rSo%232fzq12');
                 if (!$link) $loginerr .="Не удалось соединиться с БД";
                 mysql_select_db('nxt', $link);
                 $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);

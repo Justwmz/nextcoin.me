@@ -21,7 +21,7 @@ include 'deposit_nxt.php';
     <script src="js/bootstrap.min.js"></script>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-        <script type="text/javascript">
+  <script type="text/javascript">
 	<!--	
   function deposit_alert()
   {

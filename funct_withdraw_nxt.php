@@ -20,7 +20,7 @@ $secret = "sD3JmKLY16pALiSXsElbeySm1y49N9iC1JgkTz2uMAiKs7rf5BGM11FubBpm";
 $url = "http://localhost:7874/nxt?requestType=sendMoney&secretPhrase=".$secret."&recipient=".$row['wallet_nxt']."&amount=".$_POST['amount']."&fee=1&deadline=5";
   $json = file_get_contents($url);
   $Item = json_decode($json);
-  mysql_query("INSERT INTO withdraw (id, user_id, amount, id_transaction) VALUES (NULL, ".$user_id.", ".$_POST['amount'].", ".$Item->transaction.""),$link);
+  mysql_query("INSERT INTO withdraw (id, user_id, amount, id_transaction) VALUES (NULL, ".$user_id.", ".$_POST['amount'].", ".$Item->transaction.")",$link);
                 }
                 sleep(2);
   header ("location: profile.php?id=".$user_id."");

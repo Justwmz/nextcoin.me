@@ -14,7 +14,7 @@ include 'deposit_nxt.php';
 <!DOCTYPE html>
 <html>
   <head>
-    <title>NextCoin.me | History</title>
+    <title>NextCoin.me | Change Password</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <!-- Bootstrap -->
@@ -80,7 +80,7 @@ include 'deposit_nxt.php';
                 echo("</a></li>"); 
                 ?>                             
                         </span></a></li>
-						<li><a href="chpass.php"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
                         <li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Exit</a></li>
                     </ul>
             </li>
@@ -100,38 +100,23 @@ include 'deposit_nxt.php';
     </div>
     <div class="container" style="padding-top: 70px">
       <div class="row">
-        <div class="col-md-8">
-          <table class="table table-bordered">
-          <legend><center>History</center></legend>
-            <tr>
-              <td><b>№</b></td>
-              <td><b>Transaction id</b></td>
-              <td><b>Сonfirmation</b></td>
-            </tr>
-<?php
-/*
-  Устанавливаем соединение с базой , после чего вытаскиваем данные.
-*/
-    if (!$link) $loginerr .="Не удалось соединиться с БД";
-    mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM history",$link);
-                while($row = mysql_fetch_assoc($result)) {
-
-    $url = "http://localhost:7874/nxt?requestType=getTransactionBytes&transaction=".$row['transaction_id']."";
-    $json = file_get_contents($url);
-    $obj = json_decode($json);
-
-                  echo("<tr>");
-                  echo("<td>".$row['id']."</td>");
-                  echo("<td>".$row['transaction_id']."</td>");
-                  echo("<td>".$obj->confirmations."</td>");
-                  echo("</tr>");
-                }
-?>
-          </table>
+        <div class="col-md-4">
+            <form role="form" method="POST" action="funct_chpass.php">
+              <div class="form-group">
+                <label>Current Password</label>
+                <input type="password" class="form-control" placeholder="Current Password" name="password">
+              </div>
+              <div class="form-group">
+                <label>New Password</label>
+                <input type="password" class="form-control" placeholder="New Password" name="new_password">
+              </div>
+              <div class="form-group">
+                <label>Repeat New Password</label>
+                <input type="password" class="form-control" placeholder="Repeat New Password" name="re_new_password">
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
-      </div>
-    </div>
 
 
     <script src="js/jquery-1.9.1.js"></script>

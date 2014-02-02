@@ -14,7 +14,7 @@ include 'deposit_nxt.php';
 <!DOCTYPE html>
 <html>
   <head>
-    <title>NextCoin.me | History</title>
+    <title>NextCoin.me | Change Password</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <!-- Bootstrap -->
@@ -80,7 +80,7 @@ include 'deposit_nxt.php';
                 echo("</a></li>"); 
                 ?>                             
                         </span></a></li>
-						<li><a href="chpass.php"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
                         <li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Exit</a></li>
                     </ul>
             </li>
@@ -101,37 +101,33 @@ include 'deposit_nxt.php';
     <div class="container" style="padding-top: 70px">
       <div class="row">
         <div class="col-md-8">
-          <table class="table table-bordered">
-          <legend><center>History</center></legend>
-            <tr>
-              <td><b>№</b></td>
-              <td><b>Transaction id</b></td>
-              <td><b>Сonfirmation</b></td>
-            </tr>
-<?php
-/*
-  Устанавливаем соединение с базой , после чего вытаскиваем данные.
-*/
-    if (!$link) $loginerr .="Не удалось соединиться с БД";
-    mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM history",$link);
-                while($row = mysql_fetch_assoc($result)) {
+      <?php 
+      if(isset($_POST['password']))
+      {
+                $new_password = md5($_POST['new_password']);
+                $current_password = md5($_POST['password']);
 
-    $url = "http://localhost:7874/nxt?requestType=getTransactionBytes&transaction=".$row['transaction_id']."";
-    $json = file_get_contents($url);
-    $obj = json_decode($json);
+                $pass = mysql_query("SELECT * FROM users WHERE id=$user_id");
+                while($row10 = mysql_fetch_assoc($pass)) {
 
-                  echo("<tr>");
-                  echo("<td>".$row['id']."</td>");
-                  echo("<td>".$row['transaction_id']."</td>");
-                  echo("<td>".$obj->confirmations."</td>");
-                  echo("</tr>");
+                  if($current_password == $row10['password'])
+                      {
+                      mysql_query("UPDATE users SET password='$new_password' WHERE id='$user_id'");
+                                  echo("<div class='alert alert-success'>"); 
+                                    echo("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"); 
+                                    echo("Password Changed!"); 
+                                  echo("</div>"); 
+                      }
+                      else{
+                                  echo("<div class='alert alert-danger'>"); 
+                                    echo("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"); 
+                                    echo("Password Not Changed!"); 
+                                  echo("</div>"); 
+                      }
                 }
-?>
-          </table>
+      }
+      ?>
         </div>
-      </div>
-    </div>
 
 
     <script src="js/jquery-1.9.1.js"></script>

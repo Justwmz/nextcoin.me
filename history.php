@@ -77,7 +77,19 @@ include 'deposit_nxt.php';
                 */
                     echo "History";
                 }
-                echo("</a></li>"); 
+                echo("</a></li>");
+
+                if (!$link) $loginerr .="Не удалось соединиться с БД";
+                mysql_select_db('nxt', $link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                while($row = mysql_fetch_assoc($result)) {
+                  if($row['group'] == Administrator)
+                  {
+                  echo("<li><a href='/control'><span class='glyphicon glyphicon-warning-sign'></span> ");
+                    echo "Control Panel";
+                  }
+                }
+                echo("</a></li>");  
                 ?>                             
                         </span></a></li>
 						<li><a href="chpass.php"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>

@@ -88,6 +88,18 @@ include 'deposit_nxt.php';
                     echo "History";
                 }
                 echo("</a></li>"); 
+
+                if (!$link) $loginerr .="Не удалось соединиться с БД";
+                mysql_select_db('nxt', $link);
+                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
+                while($row = mysql_fetch_assoc($result)) {
+                  if($row['group'] == Administrator)
+                  {
+                  echo("<li><a href='/control'><span class='glyphicon glyphicon-warning-sign'></span> ");
+                    echo "Control Panel";
+                  }
+                }
+                echo("</a></li>"); 
                 ?>                             
                         </span></a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
@@ -198,7 +210,7 @@ include 'deposit_nxt.php';
             </div>
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary">Deposit USD</button>
+                  <button type="submit" class="btn btn-primary" disabled="disabled">Deposit USD</button>
                   <button type="button" class="btn btn-danger" disabled="disabled">Withdraw USD</button>
                 </div>
               </div>

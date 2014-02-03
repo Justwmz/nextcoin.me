@@ -90,6 +90,42 @@ $user_id = $_SESSION['id'];
 			</table>
         </div>
       </div>
+        <div class="row">
+          <div class="col-md-6">
+              <table class="table table-bordered">
+                    <legend>News</legend>
+                      <tr>
+                        <td>Id</td>
+                        <td>Name</td>
+                        <td>Date</td>
+                      </tr>
+                      <?php
+                      if (!$link) $loginerr .="Не удалось соединиться с БД";
+                      mysql_select_db('nxt', $link);
+                            $result = mysql_query("SELECT * FROM news",$link);
+                            while($row = mysql_fetch_assoc($result)) {
+                              if($row['status'] == 0)
+                                  {
+                                  echo("<tr class='alert alert-danger'>");
+                                  echo("<td>".$row['id']."</td>");
+                                  echo("<td>".$row['name']."</td>");
+                                  echo("<td>".$row['date']."</td>");
+                                  echo("</tr>");
+                                  }
+                                  else
+                                      {
+                                      echo("<tr class='alert alert-success'>");
+                                      echo("<td>".$row['id']."</td>");
+                                      echo("<td>".$row['name']."</td>");
+                                      echo("<td>".$row['date']."</td>");
+                                      echo("</tr>");                                        
+                                      }
+                               }
+                      ?>
+              </table>
+              <a class="btn btn-primary" href="">New</a>
+          </div>
+        </div>
     </div>
   </body>
 </html>

@@ -258,32 +258,45 @@ include 'deposit_nxt.php';
                       			    <td>
                       			      <legend>Lates News</legend>
                       							<div class="panel-group" id="accordion">
-                      							  <div class="panel panel-default">
-                      							    <div class="panel-heading">
-                      							      <h4 class="panel-title">
-                      							        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                      							          <b>10.01.2014</b> [Pre Alpha Test so soon]
-                      							        </a>
-                      							      </h4>
-                      							    </div>
-                      							    <div id="collapseOne" class="panel-collapse collapse">
-                      							      <div class="panel-body">
-                      							      </div>
-                      							    </div>
-                      							  </div>
-                      							  <div class="panel panel-default">
-                      							    <div class="panel-heading">
-                      							      <h4 class="panel-title">
-                      							        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                      							          <b>08.01.2014</b> [Testing many new functions]
-                      							        </a>
-                      							      </h4>
-                      							    </div>
-                      							    <div id="collapseTwo" class="panel-collapse collapse">
-                      							      <div class="panel-body">
-                      							      </div>
-                      							    </div>
-                      							  </div>
+                      							<?php
+						                 			if (!$link) $loginerr .="Не удалось соединиться с БД";
+						                			mysql_select_db('nxt', $link);
+						                            $result = mysql_query("SELECT * FROM news",$link);
+						                            while($row = mysql_fetch_assoc($result)) {
+						                            	if($row['status'] == 0){
+	                      							  echo ("<div class='panel panel-default' style='display: none;'>");
+	                      							    echo ("<div class='panel-heading'>");
+	                      							      echo ("<h4 class='panel-title'>");
+	                      							        echo ("<a data-toggle='collapse' data-parent='#accordion' href='#collapse".$row['id']."'>");
+	                      							          echo ("<b>".$row['date']."</b> [".$row['name']."]");
+	                      							        echo ("</a>");
+	                      							      echo ("</h4>");
+	                      							    echo ("</div>");
+	                      							    echo ("<div id='collapse".$row['id']."' class='panel-collapse collapse'>");
+	                      							      echo ("<div class='panel-body'>");
+	                      							      	echo $row['news_text'];
+	                      							      echo ("</div>");
+	                      							    echo ("</div>");
+	                      							  echo ("</div>");
+	                      							  	}
+	                      							  	else{
+			                      							  echo ("<div class='panel panel-default'>");
+			                      							    echo ("<div class='panel-heading'>");
+			                      							      echo ("<h4 class='panel-title'>");
+			                      							        echo ("<a data-toggle='collapse' data-parent='#accordion' href='#collapse".$row['id']."'>");
+			                      							          echo ("<b>".$row['date']."</b> [".$row['name']."]");
+			                      							        echo ("</a>");
+			                      							      echo ("</h4>");
+			                      							    echo ("</div>");
+			                      							    echo ("<div id='collapse".$row['id']."' class='panel-collapse collapse'>");
+			                      							      echo ("<div class='panel-body'>");
+			                      							      	echo $row['news_text'];
+			                      							      echo ("</div>");
+			                      							    echo ("</div>");
+			                      							  echo ("</div>");
+	                      							  		}
+                      								}
+                      							?>
                       							</div>
                      			     </td>
                      			   </tr>

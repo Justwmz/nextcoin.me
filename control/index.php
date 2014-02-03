@@ -72,11 +72,21 @@ $user_id = $_SESSION['id'];
         </div>
         <div class="col-md-6">
         	<table class="table table-striped">
+                <legend>Loging System</legend>
         			<tr>
-        				<td>
-        					
-        				</td>
-        			</tr>        			
+        				<td>Файл</td>
+        			</tr>  
+        			<?php 
+					$dir = "/var/www/next/log/";   //задаём имя директории
+						if(is_dir($dir)) {   //проверяем наличие директории
+							         $files = scandir($dir);    //сканируем (получаем массив файлов)
+							         array_shift($files); // удаляем из массива '.'
+							         array_shift($files); // удаляем из массива '..'
+							         for($i=0; $i<sizeof($files); $i++) {
+							         echo ("<tr><td><a href=/log/".$files[$i]." title='открыть/скачать файл или страницу'>".$files[$i]."</a></td></tr>");
+							         }  //выводим все файлы
+							    } 
+        			?>       			
 			</table>
         </div>
       </div>

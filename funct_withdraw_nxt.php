@@ -21,6 +21,12 @@ $url = "http://localhost:7874/nxt?requestType=sendMoney&secretPhrase=".$secret."
   $json = file_get_contents($url);
   $Item = json_decode($json);
   mysql_query("INSERT INTO withdraw (id, user_id, amount, id_transaction) VALUES (NULL, ".$user_id.", ".$_POST['amount'].", ".$Item->transaction.")",$link);
+
+$today = date(YmdHis);
+$fp = fopen("/var/www/next/log/withdraw_".$today.".log", "w+");
+$text = "".$user_id."|".$_POST['amount']."|".$Item->transaction."";
+$write = fwrite($fp, $text);
+fclose($fp);  
                 }
                 sleep(2);
   header ("location: profile.php?id=".$user_id."");

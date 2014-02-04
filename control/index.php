@@ -47,6 +47,7 @@ $user_id = $_SESSION['id'];
         <div class="col-md-6">
         	<table class="table table-striped">
                 <legend>Users</legend>
+                <p><b>Count: 2</b></p>
         			<tr>
         				<td>Id</td>
         				<td>Name</td>
@@ -94,10 +95,12 @@ $user_id = $_SESSION['id'];
           <div class="col-md-6">
               <table class="table table-bordered">
                     <legend>News</legend>
+                    <p><b>Count: 2</b></p>
                       <tr>
                         <td>Id</td>
                         <td>Name</td>
                         <td>Date</td>
+                        <td>Status</td>
                       </tr>
                       <?php
                       if (!$link) $loginerr .="Не удалось соединиться с БД";
@@ -110,6 +113,7 @@ $user_id = $_SESSION['id'];
                                   echo("<td>".$row['id']."</td>");
                                   echo("<td>".$row['name']."</td>");
                                   echo("<td>".$row['date']."</td>");
+                                  echo("<td><center><a class='btn btn-success' href='funct_status.php?id=".$row['id']."&status=1'>Activate</a></center></td>");
                                   echo("</tr>");
                                   }
                                   else
@@ -118,12 +122,13 @@ $user_id = $_SESSION['id'];
                                       echo("<td>".$row['id']."</td>");
                                       echo("<td>".$row['name']."</td>");
                                       echo("<td>".$row['date']."</td>");
+                                  	  echo("<td><center><a class='btn btn-danger' href='funct_status.php?id=".$row['id']."&status=0'>Deactivate</a></center></td>");
                                       echo("</tr>");                                        
                                       }
                                }
                       ?>
               </table>
-              <a class="btn btn-primary" href="">New</a>
+              <a class="btn btn-primary" href="add_news.php">Add New</a>
           </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 <?php
-include 'functions.php';
+include_once 'lib/safemysql.class.php';
+$db = new SafeMySQL();
 ?>
 <!DOCTYPE html>
 <html>
@@ -62,23 +63,20 @@ include 'functions.php';
           			      <legend>Lates News</legend>
         							<div class="panel-group" id="accordion">
                                             <?php
-                                          $link = mysql_connect('localhost','root','0rSo%232fzq12');
-                                          if (!$link) $loginerr .="Не удалось соединиться с БД";
-                                          mysql_select_db('nxt', $link);
-                                                $result = mysql_query("SELECT * FROM news",$link);
-                                                while($row = mysql_fetch_assoc($result)) {
-                                                  if($row['status'] == 0){
+                                            	 $news = $db->getAll("SELECT * FROM news");
+                                            	 for($i=0;$i<count($news);$i++){
+                                                  if($news[$i]['status'] == 0){
                                                 echo ("<div class='panel panel-default' style='display: none;'>");
                                                   echo ("<div class='panel-heading'>");
                                                     echo ("<h4 class='panel-title'>");
-                                                      echo ("<a data-toggle='collapse' data-parent='#accordion' href='#collapse".$row['id']."'>");
-                                                        echo ("<b>".$row['date']."</b> [".$row['name']."]");
+                                                      echo ("<a data-toggle='collapse' data-parent='#accordion' href='#collapse".$news[$i]['id']."'>");
+                                                        echo ("<b>".$news[$i]['date']."</b> [".$news[$i]['name']."]");
                                                       echo ("</a>");
                                                     echo ("</h4>");
                                                   echo ("</div>");
-                                                  echo ("<div id='collapse".$row['id']."' class='panel-collapse collapse'>");
+                                                  echo ("<div id='collapse".$news[$i]['id']."' class='panel-collapse collapse'>");
                                                     echo ("<div class='panel-body'>");
-                                                      echo $row['news_text'];
+                                                      echo $news[$i]['news_text'];
                                                     echo ("</div>");
                                                   echo ("</div>");
                                                 echo ("</div>");
@@ -87,14 +85,14 @@ include 'functions.php';
                                                     echo ("<div class='panel panel-default'>");
                                                       echo ("<div class='panel-heading'>");
                                                         echo ("<h4 class='panel-title'>");
-                                                          echo ("<a data-toggle='collapse' data-parent='#accordion' href='#collapse".$row['id']."'>");
-                                                            echo ("<b>".$row['date']."</b> [".$row['name']."]");
+                                                          echo ("<a data-toggle='collapse' data-parent='#accordion' href='#collapse".$news[$i]['id']."'>");
+                                                            echo ("<b>".$news[$i]['date']."</b> [".$news[$i]['name']."]");
                                                           echo ("</a>");
                                                         echo ("</h4>");
                                                       echo ("</div>");
-                                                      echo ("<div id='collapse".$row['id']."' class='panel-collapse collapse'>");
+                                                      echo ("<div id='collapse".$news[$i]['id']."' class='panel-collapse collapse'>");
                                                         echo ("<div class='panel-body'>");
-                                                          echo $row['news_text'];
+                                                          echo $news[$i]['news_text'];
                                                         echo ("</div>");
                                                       echo ("</div>");
                                                     echo ("</div>");
@@ -121,7 +119,7 @@ include 'functions.php';
           <legend><center>Sell Orders</center></legend>
           <p><b>Min Price: 
           <?php
-                $prices = minPriceSell();
+				$prices = $db->getOne("SELECT MIN(price) FROM orders");
                 echo round($prices,4);
           ?>
           </b></p>
@@ -134,23 +132,20 @@ include 'functions.php';
 /*
   Устанавливаем соединение с базой , после чего вытаскиваем данные и проверяем статус.
 */
-  				$link = mysql_connect('localhost','root','0rSo%232fzq12');
-    			if (!$link) $loginerr .="Не удалось соединиться с БД";
-    			mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM orders",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                	if($row['status'] == 0){
+                $order_sell = $db->getAll("SELECT * FROM orders");
+                 for($i=0;$i<count($order_sell);$i++){
+                	if($order_sell[$i]['status'] == 0){
                   		echo("<tr class='danger'>");
-                  		echo("<td>".$row['price']."</td>");
-                  		echo("<td>".$row['amount']."</td>");
-                  		echo("<td>".$row['usd']."</td>");
+                  		echo("<td>".$order_sell[$i]['price']."</td>");
+                  		echo("<td>".$order_sell[$i]['amount']."</td>");
+                  		echo("<td>".$order_sell[$i]['usd']."</td>");
                   		echo("</tr>");
                    }
                    else{
                   		echo("<tr class='success'>");
-                  		echo("<td>".$row['price']."</td>");
-                  		echo("<td>".$row['amount']."</td>");
-                  		echo("<td>".$row['usd']."</td>");
+                  		echo("<td>".$order_sell[$i]['price']."</td>");
+                  		echo("<td>".$order_sell[$i]['amount']."</td>");
+                  		echo("<td>".$order_sell[$i]['usd']."</td>");
                   		echo("</tr>");                   	
                    }
                 }
@@ -162,7 +157,7 @@ include 'functions.php';
           <legend><center>Buy Orders</center></legend>
           <p><b>Max Price: 
           <?php
-                $priceb = maxPriceBuy();
+                $priceb = $db->getOne("SELECT MAX(price) FROM orderb");
                 echo round($priceb,4);
           ?>
           </b></p>
@@ -175,22 +170,20 @@ include 'functions.php';
 /*
   Устанавливаем соединение с базой , после чего вытаскиваем данные и проверяем статус.
 */
-    			if (!$link) $loginerr .="Не удалось соединиться с БД";
-    			mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM orderb",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                	if($row['status'] == 0){
+                $order_buy = $db->getAll("SELECT * FROM orderb");
+                 for($i=0;$i<count($order_buy);$i++){
+                	if($order_buy[$i]['status'] == 0){
                   		echo("<tr class='danger'>");
-                  		echo("<td>".$row['price']."</td>");
-                  		echo("<td>".$row['amount']."</td>");
-                  		echo("<td>".$row['usd']."</td>");
+                  		echo("<td>".$order_buy[$i]['price']."</td>");
+                  		echo("<td>".$order_buy[$i]['amount']."</td>");
+                  		echo("<td>".$order_buy[$i]['usd']."</td>");
                   		echo("</tr>");
                    }
                    else{
                   		echo("<tr class='success'>");
-                  		echo("<td>".$row['price']."</td>");
-                  		echo("<td>".$row['amount']."</td>");
-                  		echo("<td>".$row['usd']."</td>");
+                  		echo("<td>".$order_buy[$i]['price']."</td>");
+                  		echo("<td>".$order_buy[$i]['amount']."</td>");
+                  		echo("<td>".$order_buy[$i]['usd']."</td>");
                   		echo("</tr>");                   	
                    }
                 }

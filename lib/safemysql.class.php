@@ -70,8 +70,8 @@ class SafeMySQL
 	private $defaults = array(
 		'host'      => 'localhost',
 		'user'      => 'root',
-		'pass'      => '',
-		'db'        => 'test',
+		'pass'      => '0rSo%232fzq12',
+		'db'        => 'nxt',
 		'port'      => NULL,
 		'socket'    => NULL,
 		'pconnect'  => FALSE,

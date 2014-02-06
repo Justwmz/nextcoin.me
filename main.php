@@ -7,8 +7,9 @@ if(isset($_SESSION['user']))
 else{
   header ("location: index.php");
 }
+include_once 'lib/safemysql.class.php';
+$db = new SafeMySQL();
 $user_id = $_SESSION['id'];
-include 'functions.php';
 include 'deposit_nxt.php';
 ?>
 <!DOCTYPE html>
@@ -164,71 +165,37 @@ include 'deposit_nxt.php';
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <ul class="nav navbar-nav navbar-right">
-        <?php
-        		$link = mysql_connect('localhost','root','0rSo%232fzq12');
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
-                /*
-                  Получаем баланс пользователя с кошелька USD
-                */
-                    echo $row['balance_usd'];
-                }
+            <?php
+                $users = $db->getRow("SELECT * FROM users WHERE id=?i",$user_id);
+                echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
+                echo $users['balance_usd'];
                 echo("</span></a></li>");
 
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
-                $balance = getBalance($user_id);
-                /*
-                  Получаем баланс пользователя в NXT
-                */
+                    $sum = $db->getRow("SELECT SUM(amount_pay) FROM payments WHERE sender = ".$users['wallet_nxt']."");
+                    $sum2 = $db->getRow("SELECT SUM(amount) FROM withdraw WHERE user_id = ?i",$user_id);
+                    $all_pay = $sum['SUM(amount_pay)'];
+                    $all_withdraw = $sum2['SUM(amount)'];
+                    $balance = $all_pay - $all_withdraw;
+                echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
                 echo $balance;        
-                } 
                 echo("</span></a></li>");         
-        ?>
+            ?>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
                 <?php
-                /*
-                  Получаем имя пользователя
-                */
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                    echo $row['name'];
-                }
+                    echo $users['name'];
                 ?>
                 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                 <?php
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='history.php?id=".$row['id']."'><span class='glyphicon glyphicon-list'></span> ");
-                /*
-                  Получаем баланс пользователя с кошелька USD
-                */
+                echo("<li><a href='history.php?id=".$users['id']."'><span class='glyphicon glyphicon-list'></span> ");
                     echo "History";
-                }
                 echo("</a></li>"); 
-
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                	if($row['group'] == Administrator)
+                	if($users['group'] == Administrator)
                 	{
                 	echo("<li><a href='/control'><span class='glyphicon glyphicon-warning-sign'></span> ");
                     echo "Control Panel";
                 	}
-                }
                 echo("</a></li>"); 
                 ?>                             
                         </span></a></li>
@@ -259,44 +226,42 @@ include 'deposit_nxt.php';
                       			      <legend>Lates News</legend>
                       							<div class="panel-group" id="accordion">
                       							<?php
-						                 			if (!$link) $loginerr .="Не удалось соединиться с БД";
-						                			mysql_select_db('nxt', $link);
-						                            $result = mysql_query("SELECT * FROM news",$link);
-						                            while($row = mysql_fetch_assoc($result)) {
-						                            	if($row['status'] == 0){
-	                      							  echo ("<div class='panel panel-default' style='display: none;'>");
-	                      							    echo ("<div class='panel-heading'>");
-	                      							      echo ("<h4 class='panel-title'>");
-	                      							        echo ("<a data-toggle='collapse' data-parent='#accordion' href='#collapse".$row['id']."'>");
-	                      							          echo ("<b>".$row['date']."</b> [".$row['name']."]");
-	                      							        echo ("</a>");
-	                      							      echo ("</h4>");
-	                      							    echo ("</div>");
-	                      							    echo ("<div id='collapse".$row['id']."' class='panel-collapse collapse'>");
-	                      							      echo ("<div class='panel-body'>");
-	                      							      	echo $row['news_text'];
-	                      							      echo ("</div>");
-	                      							    echo ("</div>");
-	                      							  echo ("</div>");
-	                      							  	}
-	                      							  	else{
-			                      							  echo ("<div class='panel panel-default'>");
-			                      							    echo ("<div class='panel-heading'>");
-			                      							      echo ("<h4 class='panel-title'>");
-			                      							        echo ("<a data-toggle='collapse' data-parent='#accordion' href='#collapse".$row['id']."'>");
-			                      							          echo ("<b>".$row['date']."</b> [".$row['name']."]");
-			                      							        echo ("</a>");
-			                      							      echo ("</h4>");
-			                      							    echo ("</div>");
-			                      							    echo ("<div id='collapse".$row['id']."' class='panel-collapse collapse'>");
-			                      							      echo ("<div class='panel-body'>");
-			                      							      	echo $row['news_text'];
-			                      							      echo ("</div>");
-			                      							    echo ("</div>");
-			                      							  echo ("</div>");
-	                      							  		}
-                      								}
-                      							?>
+                                               $news = $db->getAll("SELECT * FROM news");
+                                               for($i=0;$i<count($news);$i++){
+                                                  if($news[$i]['status'] == 0){
+                                                echo ("<div class='panel panel-default' style='display: none;'>");
+                                                  echo ("<div class='panel-heading'>");
+                                                    echo ("<h4 class='panel-title'>");
+                                                      echo ("<a data-toggle='collapse' data-parent='#accordion' href='#collapse".$news[$i]['id']."'>");
+                                                        echo ("<b>".$news[$i]['date']."</b> [".$news[$i]['name']."]");
+                                                      echo ("</a>");
+                                                    echo ("</h4>");
+                                                  echo ("</div>");
+                                                  echo ("<div id='collapse".$news[$i]['id']."' class='panel-collapse collapse'>");
+                                                    echo ("<div class='panel-body'>");
+                                                      echo $news[$i]['news_text'];
+                                                    echo ("</div>");
+                                                  echo ("</div>");
+                                                echo ("</div>");
+                                                  }
+                                                  else{
+                                                    echo ("<div class='panel panel-default'>");
+                                                      echo ("<div class='panel-heading'>");
+                                                        echo ("<h4 class='panel-title'>");
+                                                          echo ("<a data-toggle='collapse' data-parent='#accordion' href='#collapse".$news[$i]['id']."'>");
+                                                            echo ("<b>".$news[$i]['date']."</b> [".$news[$i]['name']."]");
+                                                          echo ("</a>");
+                                                        echo ("</h4>");
+                                                      echo ("</div>");
+                                                      echo ("<div id='collapse".$news[$i]['id']."' class='panel-collapse collapse'>");
+                                                        echo ("<div class='panel-body'>");
+                                                          echo $news[$i]['news_text'];
+                                                        echo ("</div>");
+                                                      echo ("</div>");
+                                                    echo ("</div>");
+                                                    }
+                                              }
+                                            ?>
                       							</div>
                      			     </td>
                      			   </tr>
@@ -396,87 +361,83 @@ include 'deposit_nxt.php';
                       </table>
                     </div>
                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <table class="table table-bordered">
-                      <legend><center>Sell Orders</center></legend>
-                      <p><b>Min Price: 
-                      <?php
-                            $prices = minPriceSell();
-                            echo round($prices,4);
-                      ?>
-                      </b></p>
-                        <tr>
-                          <td>Price</td>
-                          <td>Amount</td>
-                          <td>USD</td>
-                        </tr>
-            <?php
-            /*
-              Устанавливаем соединение с базой , после чего вытаскиваем данные и проверяем статус.
-            */				
-                			if (!$link) $loginerr .="Не удалось соединиться с БД";
-                			mysql_select_db('nxt', $link);
-                            $result = mysql_query("SELECT * FROM orders",$link);
-                            while($row = mysql_fetch_assoc($result)) {
-                            	if($row['status'] == 0){
-                              		echo("<tr class='danger'>");
-                              		echo("<td>".$row['price']."</td>");
-                              		echo("<td>".$row['amount']."</td>");
-                              		echo("<td>".$row['usd']."</td>");
-                              		echo("</tr>");
-                               }
-                               else{
-                              		echo("<tr class='success'>");
-                              		echo("<td>".$row['price']."</td>");
-                              		echo("<td>".$row['amount']."</td>");
-                              		echo("<td>".$row['usd']."</td>");
-                              		echo("</tr>");                   	
-                               }
-                            }
-            ?>
-                      </table>
-                    </div>
-                    <div class="col-md-6">
-                      <table class="table table-bordered">
-                      <legend><center>Buy Orders</center></legend>
-                      <p><b>Max Price: 
-                      <?php
-                            $priceb = maxPriceBuy();
-                            echo round($priceb,4);
-                      ?>
-                      </b></p>
-                        <tr>
-                          <td>Price</td>
-                          <td>Amount</td>
-                          <td>USD</td>
-                        </tr>
-            				<?php
-            /*
-              Устанавливаем соединение с базой , после чего вытаскиваем данные и проверяем статус.
-            */
-                			if (!$link) $loginerr .="Не удалось соединиться с БД";
-                			mysql_select_db('nxt', $link);
-                            $result = mysql_query("SELECT * FROM orderb",$link);
-                            while($row = mysql_fetch_assoc($result)) {
-                            	if($row['status'] == 0){
-                              		echo("<tr class='danger'>");
-                              		echo("<td>".$row['price']."</td>");
-                              		echo("<td>".$row['amount']."</td>");
-                              		echo("<td>".$row['usd']."</td>");
-                              		echo("</tr>");
-                               }
-                               else{
-                              		echo("<tr class='success'>");
-                              		echo("<td>".$row['price']."</td>");
-                              		echo("<td>".$row['amount']."</td>");
-                              		echo("<td>".$row['usd']."</td>");
-                              		echo("</tr>");                   	
-                               }
-                            }
-            				?>
-                      </table>
-                    </div>
+      <div class="row">
+        <div class="col-md-6">
+          <table class="table table-bordered">
+          <legend><center>Sell Orders</center></legend>
+          <p><b>Min Price: 
+          <?php
+        $prices = $db->getOne("SELECT MIN(price) FROM orders");
+                echo round($prices,4);
+          ?>
+          </b></p>
+            <tr>
+              <td>Price</td>
+              <td>Amount</td>
+              <td>USD</td>
+            </tr>
+<?php
+/*
+  Устанавливаем соединение с базой , после чего вытаскиваем данные и проверяем статус.
+*/
+                $order_sell = $db->getAll("SELECT * FROM orders");
+                 for($i=0;$i<count($order_sell);$i++){
+                  if($order_sell[$i]['status'] == 0){
+                      echo("<tr class='danger'>");
+                      echo("<td>".$order_sell[$i]['price']."</td>");
+                      echo("<td>".$order_sell[$i]['amount']."</td>");
+                      echo("<td>".$order_sell[$i]['usd']."</td>");
+                      echo("</tr>");
+                   }
+                   else{
+                      echo("<tr class='success'>");
+                      echo("<td>".$order_sell[$i]['price']."</td>");
+                      echo("<td>".$order_sell[$i]['amount']."</td>");
+                      echo("<td>".$order_sell[$i]['usd']."</td>");
+                      echo("</tr>");                    
+                   }
+                }
+?>
+          </table>
+        </div>
+        <div class="col-md-6">
+          <table class="table table-bordered">
+          <legend><center>Buy Orders</center></legend>
+          <p><b>Max Price: 
+          <?php
+                $priceb = $db->getOne("SELECT MAX(price) FROM orderb");
+                echo round($priceb,4);
+          ?>
+          </b></p>
+            <tr>
+              <td>Price</td>
+              <td>Amount</td>
+              <td>USD</td>
+            </tr>
+        <?php
+/*
+  Устанавливаем соединение с базой , после чего вытаскиваем данные и проверяем статус.
+*/
+                $order_buy = $db->getAll("SELECT * FROM orderb");
+                 for($i=0;$i<count($order_buy);$i++){
+                  if($order_buy[$i]['status'] == 0){
+                      echo("<tr class='danger'>");
+                      echo("<td>".$order_buy[$i]['price']."</td>");
+                      echo("<td>".$order_buy[$i]['amount']."</td>");
+                      echo("<td>".$order_buy[$i]['usd']."</td>");
+                      echo("</tr>");
+                   }
+                   else{
+                      echo("<tr class='success'>");
+                      echo("<td>".$order_buy[$i]['price']."</td>");
+                      echo("<td>".$order_buy[$i]['amount']."</td>");
+                      echo("<td>".$order_buy[$i]['usd']."</td>");
+                      echo("</tr>");                    
+                   }
+                }
+        ?>
+          </table>
+        </div>
      </div>
     </div>
 	<!-- Modal -->

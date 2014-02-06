@@ -8,8 +8,9 @@ else{
   header ("location: index.php");
 }
 $user_id = $_SESSION['id'];
-include 'functions.php';
 include 'deposit_nxt.php';
+include_once 'lib/safemysql.class.php';
+$db = new SafeMySQL();
 ?>
 <!DOCTYPE html>
 <html>
@@ -24,63 +25,41 @@ include 'deposit_nxt.php';
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <ul class="nav navbar-nav navbar-right">
-        <?php
-                $link = mysql_connect('localhost','root','0rSo%232fzq12');
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
-                /*
-                  Получаем баланс пользователя с кошелька USD
-                */
-                    echo $row['balance_usd'];
-                }
+            <?php
+                $users = $db->getRow("SELECT * FROM users WHERE id=?i",$user_id);
+                echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
+                echo $users['balance_usd'];
                 echo("</span></a></li>");
 
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
-                $balance = getBalance($user_id);
-                /*
-                  Получаем баланс пользователя в NXT
-                */
+                    $sum = $db->getRow("SELECT SUM(amount_pay) FROM payments WHERE sender = ".$users['wallet_nxt']."");
+                    $sum2 = $db->getRow("SELECT SUM(amount) FROM withdraw WHERE user_id = ?i",$user_id);
+                    $all_pay = $sum['SUM(amount_pay)'];
+                    $all_withdraw = $sum2['SUM(amount)'];
+                    $balance = $all_pay - $all_withdraw;
+                echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
                 echo $balance;        
-                } 
                 echo("</span></a></li>");         
-        ?>
+            ?>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
                 <?php
-                /*
-                  Получаем имя пользователя
-                */
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                    echo $row['name'];
-                }
+                    echo $users['name'];
                 ?>
                 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                 <?php
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='history.php?id=".$row['id']."'><span class='glyphicon glyphicon-list'></span> ");
-                /*
-                  Получаем баланс пользователя с кошелька USD
-                */
+                echo("<li><a href='history.php?id=".$users['id']."'><span class='glyphicon glyphicon-list'></span> ");
                     echo "History";
-                }
+                echo("</a></li>"); 
+                  if($users['group'] == Administrator)
+                  {
+                  echo("<li><a href='/control'><span class='glyphicon glyphicon-warning-sign'></span> ");
+                    echo "Control Panel";
+                  }
                 echo("</a></li>"); 
                 ?>                             
                         </span></a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
+                        <li><a href="chpass.php"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
                         <li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Exit</a></li>
                     </ul>
             </li>
@@ -104,15 +83,11 @@ include 'deposit_nxt.php';
       <?php 
       if(isset($_POST['password']))
       {
-                $new_password = md5($_POST['new_password']);
-                $current_password = md5($_POST['password']);
-
-                $pass = mysql_query("SELECT * FROM users WHERE id=$user_id");
-                while($row10 = mysql_fetch_assoc($pass)) {
-
-                  if($current_password == $row10['password'])
+                $new_password = hash('sha256', $_POST['new_password']);
+                $current_password = hash('sha256', $_POST['password']);
+                  if($current_password == $users['password'])
                       {
-                      mysql_query("UPDATE users SET password='$new_password' WHERE id='$user_id'");
+                      $db->query("UPDATE users SET password='$new_password' WHERE id='$user_id'");
                                   echo("<div class='alert alert-success'>"); 
                                     echo("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"); 
                                     echo("Password Changed!"); 
@@ -124,7 +99,6 @@ include 'deposit_nxt.php';
                                     echo("Password Not Changed!"); 
                                   echo("</div>"); 
                       }
-                }
       }
       ?>
         </div>

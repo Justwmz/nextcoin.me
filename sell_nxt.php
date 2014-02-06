@@ -8,12 +8,14 @@ else{
   header ("location: index.php");
 }
 $user_id = $_SESSION['id'];
-include 'functions.php';
+include 'deposit_nxt.php';
+include_once 'lib/safemysql.class.php';
+$db = new SafeMySQL();
 ?>
 <!DOCTYPE html>
 <html>
   <head>
-    <title>NextCoin.me | Main Page</title>
+    <title>NextCoin.me | Sell NXT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <!-- Bootstrap -->
@@ -23,71 +25,54 @@ include 'functions.php';
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <ul class="nav navbar-nav navbar-right">
+            <?php
+                $users = $db->getRow("SELECT * FROM users WHERE id=?i",$user_id);
+                echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
+                echo $users['balance_usd'];
+                echo("</span></a></li>");
+
+                    $sum = $db->getRow("SELECT SUM(amount_pay) FROM payments WHERE sender = ".$users['wallet_nxt']."");
+                    $sum2 = $db->getRow("SELECT SUM(amount) FROM withdraw WHERE user_id = ?i",$user_id);
+                    $all_pay = $sum['SUM(amount_pay)'];
+                    $all_withdraw = $sum2['SUM(amount)'];
+                    $balance = $all_pay - $all_withdraw;
+                echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
+                echo $balance;        
+                echo("</span></a></li>");         
+            ?>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
                 <?php
-                /*
-                  Получаем имя пользователя
-                */
-                $link = mysql_connect('localhost','root','0rSo%232fzq12');
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                    echo $row['name'];
-                }
+                    echo $users['name'];
                 ?>
                 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                 <?php
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
-                /*
-                  Получаем баланс пользователя с кошелька USD
-                */
-                    echo $row['balance_usd'];
-                }
-                echo("</span></a></li>");   
-
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='profile.php?id=".$row['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
-                $balance = getBalance($user_id);
-                echo $balance;        
-                }
-
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("SELECT * FROM users WHERE id=$user_id",$link);
-                while($row = mysql_fetch_assoc($result)) {
-                echo("<li><a href='history.php?id=".$row['id']."'><span class='glyphicon glyphicon-list'></span> ");
-                /*
-                  Получаем баланс пользователя с кошелька USD
-                */
+                echo("<li><a href='history.php?id=".$users['id']."'><span class='glyphicon glyphicon-list'></span> ");
                     echo "History";
-                }
                 echo("</a></li>"); 
-                ?>                          
+                  if($users['group'] == Administrator)
+                  {
+                  echo("<li><a href='/control'><span class='glyphicon glyphicon-warning-sign'></span> ");
+                    echo "Control Panel";
+                  }
+                echo("</a></li>"); 
+                ?>                             
                         </span></a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
+                        <li><a href="chpass.php"><span class="glyphicon glyphicon-pencil"></span> Change password</a></li>
                         <li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Exit</a></li>
                     </ul>
             </li>
         </ul>
         <div class="navbar-header">
-          <a class="navbar-brand" href="main.php">NextCoin.me</a>
+          <a class="navbar-brand" href="#">NextCoin.me</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><a href="main.php">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#faq">FAQ</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about" data-toggle="modal" data-target="#about">About</a></li>         
+            <li><a href="#faq" data-toggle="modal" data-target="#faq">FAQ</a></li>
+            <li><a href="#contact" data-toggle="modal" data-target="#contact">Contact</a></li>
           </ul>
         </div><!--/.navbar-collapse -->
       </div>
@@ -100,10 +85,8 @@ include 'functions.php';
           $amount = $_POST['amount'];
           $price = $_POST['price'];
           $usd = $price * $amount;
-                if (!$link) $loginerr .="Не удалось соединиться с БД";
-                mysql_select_db('nxt', $link);
-                $result = mysql_query("INSERT INTO orders (price, amount, usd, status) VAlUES ($price, $amount, $usd, 1)",$link);
-                if($result == true){
+                $sell_nxt = $db->query("INSERT INTO orders (price, amount, usd, status) VAlUES ($price, $amount, $usd, 1)");
+                if($sell_nxt == 1){
                   echo("<div class='alert alert-success'>Операция выполнена успешно!</div>");
                 }
           ?>

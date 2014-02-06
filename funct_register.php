@@ -2,11 +2,19 @@
 $nickname = $_POST['nickname'];
 $email = $_POST['email'];
 $wallet = $_POST['wallet'];
-$password = md5($_POST['password']);
-$link = mysql_connect('localhost','root','0rSo%232fzq12');
-    if (!$link) $loginerr .="Не удалось соединиться с БД";
-                            mysql_select_db('nxt', $link);
-mysql_query("INSERT INTO users (name, email, wallet_nxt, password) VALUES ('".$nickname."', '".$email."', '".$wallet."', '".$password."')",$link);
-sleep(2);
-header ("location: index.php");
+$password = hash('sha256', $_POST['password']);
+if (preg_match("/[^(\w)|(\x7F-\xFF)|(\s)]/",$nickname))
+	{
+	echo "Invalid characters in the name!";
+	exit();	
+	}
+	else
+		{
+		include_once 'lib/safemysql.class.php';
+		$db = new SafeMySQL();
+		$sql = "INSERT INTO users (name, email, wallet_nxt, password) VALUES (?s, ?s, ?s, ?s)";
+		$db->query($sql,$nickname,$email,$wallet,$password);
+		sleep(2);
+		header ("location: index.php");
+		}
 ?>

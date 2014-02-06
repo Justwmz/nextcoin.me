@@ -27,8 +27,6 @@ $user_id = $_SESSION['id'];
                   while($row = mysql_fetch_assoc($result)) {
   
                   if($obj->{'sender'} == $row['wallet_nxt'] ){
-                          //echo "<br>".$obj->{'amount'};
-                          //echo "<br>".$obj->{'timestamp'};
                           mysql_query("INSERT INTO payments (user_id, amount_pay, times, sender) VALUES (".$user_id.", ".$obj->{'amount'}.",".$obj->{'timestamp'}.",".$obj->{'sender'}." )",$link);
                   }
          }

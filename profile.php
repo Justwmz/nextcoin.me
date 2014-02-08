@@ -141,7 +141,7 @@ $db = new SafeMySQL();
         <div class="col-md-6">
           <form class="form-horizontal" role="form" method="POST" action="deposit_usd.php">
             <div class="form-group">
-              <label class="col-sm-2 control-label">Balance USD</label>
+              <label class="col-sm-2 control-label">Balance BTC</label>
               <div class="col-sm-10">
                 <p class="form-control-static">
                 <?php
@@ -152,8 +152,8 @@ $db = new SafeMySQL();
             </div>
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary" disabled="disabled">Deposit USD</button>
-                  <button type="button" class="btn btn-danger" disabled="disabled">Withdraw USD</button>
+                  <a href="deposit_btc.php" type="submit" class="btn btn-primary">Deposit BTC</a>
+                  <button type="button" class="btn btn-danger" disabled="disabled">Withdraw BTC</button>
                 </div>
               </div>
           </form>

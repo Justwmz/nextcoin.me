@@ -146,7 +146,7 @@ $db = new SafeMySQL();
               <div class="col-sm-10">
                 <p class="form-control-static">
                 <?php
-                  echo $users['balance_usd'];
+                  echo $btc['SUM(value)'];
                 ?>
                 </p>
               </div>

@@ -3,7 +3,7 @@ include_once 'lib/safemysql.class.php';
 $db = new SafeMySQL();
 
 $my_address = "1LXMUa32niJXP2LCQ8dXG94u55CitDPucy";
-$secret = "0rSo%232fzq12";
+$secret = "moloko2324235";
 
 $user_id = $_GET['user_id'];
 $transaction_hash = $_GET['transaction_hash'];

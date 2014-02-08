@@ -27,8 +27,9 @@ $db = new SafeMySQL();
         <ul class="nav navbar-nav navbar-right">
             <?php
                 $users = $db->getRow("SELECT * FROM users WHERE id=?i",$user_id);
+                $btc = $db->getRow("SELECT SUM(value) FROM btc_payments WHERE user_id = ?i",$user_id);
                 echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
-                echo $users['balance_usd'];
+                echo $btc['SUM(value)'];
                 echo("</span></a></li>");
 
                     $sum = $db->getRow("SELECT SUM(amount_pay) FROM payments WHERE sender = ".$users['wallet_nxt']."");

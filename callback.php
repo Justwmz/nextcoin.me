@@ -7,11 +7,6 @@ $transaction_hash = $_GET['transaction_hash'];
 $value_in_btc = $_GET['value'] / 100000000;
 
 //Commented out to test, uncomment when live
-if ($_GET['test'] == true) {
-  echo 'Ignoring Test Callback';
-  return;
-}
-
 if ($_GET['address'] != $my_address) {
     echo 'Incorrect Receiving Address';
   return;

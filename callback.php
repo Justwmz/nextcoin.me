@@ -21,7 +21,7 @@ if ($_GET['secret'] != $secret) {
 }
 
   //Add the invoice to the database
-  $result = $db->query("INSERT INTO `btc_payments` (`user_id`, `transaction_hash`, `value`) values($user_id, $transaction_hash, $value_in_btc)");
+  $result = $db->query("INSERT INTO `btc_payments` (`user_id`, `transaction_hash`, `value`) values($user_id, '$transaction_hash', $value_in_btc)");
 
   if($result) {
 	   echo "*ok*";

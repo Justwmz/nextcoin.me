@@ -15,7 +15,7 @@ $db = new SafeMySQL();
 <!DOCTYPE html>
 <html>
   <head>
-    <title>NextCoin.me | Sell NXT</title>
+    <title>NextCoin.me | Quick Buy NXT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <!-- Bootstrap -->
@@ -86,17 +86,20 @@ $db = new SafeMySQL();
         <div class="col-md-8">
           <table class="table table-bordered">
           <?php
-          $amount = $_POST['amount'];
-          $price = $_POST['price'];
-          $usd = $price * $amount;
-          if ($amount > $balance)
+          $id_tr = $_POST['order_sell_id'];
+          $user_sell_id = $POST['order_sell_user_id'];
+          $usd = $_POST['order_sell_btc'];
+          $amount= $_POST['order_sell_amount'];
+          if ($usd > $btc['SUM(value)'];)
           {
             echo("<div class='alert alert-danger'>Operation can not be executed because you are not enough funds!</div>");
           }
           else{
-                $sell_nxt = $db->query("INSERT INTO orders (user_id, price, amount, usd, status) VAlUES ($user_id, $price, $amount, $usd, 1)");
-                $db->query("UPDATE users SET holdings = holdings + $amount WHERE id = ?i ",$user_id);
-                if($sell_nxt == 1){
+                $order_sell = $db->query("UPDATE orders SET status = 0 WHERE id = ?i ",$id_tr);
+                $db->query("UPDATE users SET holdings = holdings - $amount WHERE id = ?i ",$user_sell_id);
+                //$db->query("INSERT INTO history (tr_id, user_id, order_id, amount_nxt, amount_btc) VALUES ($id_tr, $user_id, 1, $amount, $usd)");
+                //$db->query("INSERT INTO history (tr_id, user_id, order_id, amount_nxt, amount_btc) VALUES ($id_tr, $user_id, 1, $amount, $usd)");
+                if($order_sell == 1){
                   echo("<div class='alert alert-success'>Операция выполнена успешно!</div>");
                 }
               }

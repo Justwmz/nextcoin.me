@@ -36,10 +36,13 @@ $db = new SafeMySQL();
                     $sum2 = $db->getRow("SELECT SUM(amount) FROM withdraw WHERE user_id = ?i",$user_id);
                     $all_pay = $sum['SUM(amount_pay)'];
                     $all_withdraw = $sum2['SUM(amount)'];
-                    $balance = $all_pay - $all_withdraw;
+                    $balance = $all_pay - ($all_withdraw + $users['holdings']);
                 echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
                 echo $balance;        
-                echo("</span></a></li>");         
+                echo("</span></a></li>"); 
+                echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-lock'></span> <span class='label label-default'>");
+                echo $users['holdings'];        
+                echo("</span></a></li>");        
             ?>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>

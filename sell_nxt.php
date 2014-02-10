@@ -27,18 +27,22 @@ $db = new SafeMySQL();
         <ul class="nav navbar-nav navbar-right">
             <?php
                 $users = $db->getRow("SELECT * FROM users WHERE id=?i",$user_id);
+                $btc = $db->getRow("SELECT SUM(value) FROM btc_payments WHERE user_id = ?i",$user_id);
                 echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
-                echo $users['balance_usd'];
+                echo $btc['SUM(value)'];
                 echo("</span></a></li>");
 
                     $sum = $db->getRow("SELECT SUM(amount_pay) FROM payments WHERE sender = ".$users['wallet_nxt']."");
                     $sum2 = $db->getRow("SELECT SUM(amount) FROM withdraw WHERE user_id = ?i",$user_id);
                     $all_pay = $sum['SUM(amount_pay)'];
                     $all_withdraw = $sum2['SUM(amount)'];
-                    $balance = $all_pay - $all_withdraw;
+                    $balance = $all_pay - ($all_withdraw + $users['holdings']);
                 echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
                 echo $balance;        
-                echo("</span></a></li>");         
+                echo("</span></a></li>"); 
+                echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-lock'></span> <span class='label label-default'>");
+                echo $users['holdings'];        
+                echo("</span></a></li>");        
             ?>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
@@ -69,7 +73,7 @@ $db = new SafeMySQL();
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="main.php">Home</a></li>
+            <li class="active"><a href="main.php">Home</a></li>
             <li><a href="#about" data-toggle="modal" data-target="#about">About</a></li>         
             <li><a href="#faq" data-toggle="modal" data-target="#faq">FAQ</a></li>
             <li><a href="#contact" data-toggle="modal" data-target="#contact">Contact</a></li>
@@ -85,10 +89,17 @@ $db = new SafeMySQL();
           $amount = $_POST['amount'];
           $price = $_POST['price'];
           $usd = $price * $amount;
+          if ($amount > $balance)
+          {
+            echo("<div class='alert alert-danger'>Operation can not be executed because you are not enough funds!</div>");
+          }
+          else{
                 $sell_nxt = $db->query("INSERT INTO orders (price, amount, usd, status) VAlUES ($price, $amount, $usd, 1)");
+                $db->query("UPDATE users SET holdings = holdings + $amount WHERE id = ?i ",$user_id);
                 if($sell_nxt == 1){
                   echo("<div class='alert alert-success'>Операция выполнена успешно!</div>");
                 }
+              }
           ?>
           </table>
         </div>

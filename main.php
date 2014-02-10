@@ -176,10 +176,13 @@ include 'deposit_nxt.php';
                     $sum2 = $db->getRow("SELECT SUM(amount) FROM withdraw WHERE user_id = ?i",$user_id);
                     $all_pay = $sum['SUM(amount_pay)'];
                     $all_withdraw = $sum2['SUM(amount)'];
-                    $balance = $all_pay - $all_withdraw;
+                    $balance = $all_pay - ($all_withdraw + $users['holdings']);
                 echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
                 echo $balance;        
-                echo("</span></a></li>");         
+                echo("</span></a></li>"); 
+                echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-lock'></span> <span class='label label-default'>");
+                echo $users['holdings'];        
+                echo("</span></a></li>");        
             ?>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
@@ -375,7 +378,8 @@ include 'deposit_nxt.php';
             <tr>
               <td>Price</td>
               <td>Amount</td>
-              <td>USD</td>
+              <td>BTC</td>
+              <td></td>
             </tr>
 <?php
 /*
@@ -388,6 +392,7 @@ include 'deposit_nxt.php';
                       echo("<td>".$order_sell[$i]['price']."</td>");
                       echo("<td>".$order_sell[$i]['amount']."</td>");
                       echo("<td>".$order_sell[$i]['usd']."</td>");
+                      echo("<td><center><button class='btn btn-info btn-xs' disabled='disabled'>Buy</button></center></td>");
                       echo("</tr>");
                    }
                    else{
@@ -395,6 +400,7 @@ include 'deposit_nxt.php';
                       echo("<td>".$order_sell[$i]['price']."</td>");
                       echo("<td>".$order_sell[$i]['amount']."</td>");
                       echo("<td>".$order_sell[$i]['usd']."</td>");
+                      echo("<td><center><button class='btn btn-info btn-xs' data-toggle='modal' data-target='#quick_buy_".$order_sell[$i]['id']."'>Buy</button></center></td>");
                       echo("</tr>");                    
                    }
                 }
@@ -413,7 +419,8 @@ include 'deposit_nxt.php';
             <tr>
               <td>Price</td>
               <td>Amount</td>
-              <td>USD</td>
+              <td>BTC</td>
+              <td></td>
             </tr>
         <?php
 /*
@@ -426,6 +433,7 @@ include 'deposit_nxt.php';
                       echo("<td>".$order_buy[$i]['price']."</td>");
                       echo("<td>".$order_buy[$i]['amount']."</td>");
                       echo("<td>".$order_buy[$i]['usd']."</td>");
+                      echo("<td><center><a href='quick_sell.php?id=".$order_buy[$i]['id']."' class='btn btn-info btn-xs' disabled='disabled'>Buy</a></center></td>");
                       echo("</tr>");
                    }
                    else{
@@ -433,6 +441,7 @@ include 'deposit_nxt.php';
                       echo("<td>".$order_buy[$i]['price']."</td>");
                       echo("<td>".$order_buy[$i]['amount']."</td>");
                       echo("<td>".$order_buy[$i]['usd']."</td>");
+                      echo("<td><center><button class='btn btn-info btn-xs' data-toggle='modal' data-target='#quick_sell_".$order_buy[$i]['id']."'>Buy</button></center></td>");
                       echo("</tr>");                    
                    }
                 }
@@ -483,5 +492,72 @@ include 'deposit_nxt.php';
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
+  <?php
+for($i=0;$i<count($order_sell);$i++){
+  echo("<div class='modal fade' id='quick_buy_".$order_sell[$i]['id']."' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>");
+    echo("<div class='modal-dialog'>");
+      echo("<div class='modal-content'>");
+        echo("<div class='modal-header'>");
+          echo("<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>");
+          echo("<h4 class='modal-title' id='myModalLabel'>Quick Buy NXT</h4>");
+        echo("</div>");
+        echo("<div class='modal-body'>");
+        echo("<div class='alert alert-info'>Upon clicking on 'Confirm' the transaction is processed instantly and the total price is deducted from your online cash balance!</div>");
+              echo("<table class='table table-bordered'>");
+              echo("<tr>");
+              echo("<td><b>Price</b></td>");
+              echo("<td>".$order_sell[$i]['price']."</td>");
+              echo("</tr>");
+              echo("<tr>");
+              echo("<td><b>Amount NXT</b></td>");
+              echo("<td>".$order_sell[$i]['amount']."</td>");
+              echo("</tr>");
+              echo("<tr>");
+              echo("<td><b>BTC</b></td>");
+              echo("<td>".$order_sell[$i]['usd']."</td>");
+              echo("</tr>");
+              echo("</table>");
+        echo("</div>");
+      echo("<div class='modal-footer'>");
+        echo("<button type='button' class='btn btn-primary'>Confirm</button>");
+      echo("</div>");
+      echo("</div>");
+    echo("</div>");
+  echo("</div>");
+}
+
+for($i=0;$i<count($order_buy);$i++){
+  echo("<div class='modal fade' id='quick_sell_".$order_buy[$i]['id']."' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>");
+    echo("<div class='modal-dialog'>");
+      echo("<div class='modal-content'>");
+        echo("<div class='modal-header'>");
+          echo("<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>");
+          echo("<h4 class='modal-title' id='myModalLabel'>Quick Sell NXT</h4>");
+        echo("</div>");
+        echo("<div class='modal-body'>");
+        echo("<div class='alert alert-info'>Upon clicking on 'Confirm' the transaction is processed instantly and the total price is deducted from your online cash balance!</div>");
+              echo("<table class='table table-bordered'>");
+              echo("<tr>");
+              echo("<td><b>Price</b></td>");
+              echo("<td>".$order_buy[$i]['price']."</td>");
+              echo("</tr>");
+              echo("<tr>");
+              echo("<td><b>Amount NXT</b></td>");
+              echo("<td>".$order_buy[$i]['amount']."</td>");
+              echo("</tr>");
+              echo("<tr>");
+              echo("<td><b>BTC</b></td>");
+              echo("<td>".$order_buy[$i]['usd']."</td>");
+              echo("</tr>");
+              echo("</table>");
+        echo("</div>");
+      echo("<div class='modal-footer'>");
+        echo("<button type='button' class='btn btn-primary'>Confirm</button>");
+      echo("</div>");
+      echo("</div>");
+    echo("</div>");
+  echo("</div>");
+}
+  ?>
   </body>
 </html>

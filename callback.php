@@ -22,6 +22,11 @@ if ($_GET['secret'] != $secret) {
 
   //Add the invoice to the database
   $result = $db->query("INSERT INTO `btc_payments` (`user_id`, `transaction_hash`, `value`) values($user_id, '$transaction_hash', $value_in_btc)");
+  $today = date(YmdHis);
+  $fp = fopen("/var/www/next/log/btc_deposit_".$today.".log", "w+");
+  $text = "".$user_id."|".$value_in_btc."|".$transaction_hash."";
+  $write = fwrite($fp, $text);
+  fclose($fp);
 
   if($result) {
 	   echo "*ok*";

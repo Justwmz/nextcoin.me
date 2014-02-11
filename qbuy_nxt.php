@@ -87,21 +87,24 @@ $db = new SafeMySQL();
           <table class="table table-bordered">
           <?php
           $id_tr = $_POST['order_sell_id'];
-          $user_sell_id = $POST['order_sell_user_id'];
+          $user_sell_id = $_POST['order_sell_user_id'];
           $usd = $_POST['order_sell_btc'];
           $amount= $_POST['order_sell_amount'];
-          if ($usd > $btc['SUM(value)'];)
+          if ($usd > $btc['SUM(value)'])
           {
             echo("<div class='alert alert-danger'>Operation can not be executed because you are not enough funds!</div>");
           }
           else{
                 $order_sell = $db->query("UPDATE orders SET status = 0 WHERE id = ?i ",$id_tr);
-                $db->query("UPDATE users SET holdings = holdings - $amount WHERE id = ?i ",$user_sell_id);
-                //$db->query("INSERT INTO history (tr_id, user_id, order_id, amount_nxt, amount_btc) VALUES ($id_tr, $user_id, 1, $amount, $usd)");
-                //$db->query("INSERT INTO history (tr_id, user_id, order_id, amount_nxt, amount_btc) VALUES ($id_tr, $user_id, 1, $amount, $usd)");
+                $holdings_user = $db->query("UPDATE users SET holdings = holdings - $amount WHERE id = ?i ",$user_sell_id);
+                $user1 = $db->query("INSERT INTO history (tr_id, user_id, user_id_2, order_id, amount_nxt, amount_btc) VALUES ($id_tr, $user_id, $user_sell_id, 1, $amount, $usd)");
+                $user2 = $db->query("INSERT INTO history (tr_id, user_id, user_id_2, order_id, amount_nxt, amount_btc) VALUES ($id_tr, $user_id, $user_sell_id, 2, $amount, $usd)");
                 if($order_sell == 1){
                   echo("<div class='alert alert-success'>Операция выполнена успешно!</div>");
                 }
+                  else{
+                    echo("<div class='alert alert-danger'>Операция невыполнена успешно!</div>");
+                  }
               }
           ?>
           </table>

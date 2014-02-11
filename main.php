@@ -168,17 +168,20 @@ include 'deposit_nxt.php';
             <?php
                 $users = $db->getRow("SELECT * FROM users WHERE id=?i",$user_id);
                 $btc = $db->getRow("SELECT SUM(value) FROM btc_payments WHERE user_id = ?i",$user_id);
+                $oper = $db->getRow("SELECT SUM(amount_btc) FROM history WHERE user_id = ?i AND order_id = 2",$user_id);
                 echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-usd'></span> <span class='label label-default'>");
-                echo $btc['SUM(value)'];
+                $balance_btc = $btc['SUM(value)'] - $oper['SUM(amount_btc)'];
+                echo round($balance_btc,4);
                 echo("</span></a></li>");
 
                     $sum = $db->getRow("SELECT SUM(amount_pay) FROM payments WHERE sender = ".$users['wallet_nxt']."");
                     $sum2 = $db->getRow("SELECT SUM(amount) FROM withdraw WHERE user_id = ?i",$user_id);
+                    $oper2 = $db->getRow("SELECT SUM(amount_nxt) FROM history WHERE user_id = ?i AND order_id = 1",$user_id);
                     $all_pay = $sum['SUM(amount_pay)'];
                     $all_withdraw = $sum2['SUM(amount)'];
-                    $balance = $all_pay - ($all_withdraw + $users['holdings']);
+                    $balance_nxt = $all_pay - ($all_withdraw + $users['holdings'] + $oper2['SUM(amount_nxt)']);
                 echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-globe'></span> <span class='label label-default'>");
-                echo $balance;        
+                echo $balance_nxt;        
                 echo("</span></a></li>"); 
                 echo("<li><a href='profile.php?id=".$users['id']."'><span class='glyphicon glyphicon-lock'></span> <span class='label label-default'>");
                 echo $users['holdings'];        
@@ -502,7 +505,7 @@ for($i=0;$i<count($order_sell);$i++){
           echo("<h4 class='modal-title' id='myModalLabel'>Quick Buy NXT</h4>");
         echo("</div>");
         echo("<div class='modal-body'>");
-        echo("<form method='POST' action=''>");
+        echo("<form role='form' method='POST' action='qbuy_nxt.php'>");
         echo("<div class='alert alert-info'>Upon clicking on 'Confirm' the transaction is processed instantly and the total price is deducted from your online cash balance!</div>");
               echo("<table class='table table-bordered'>");
               echo("<tr>");
@@ -525,7 +528,7 @@ for($i=0;$i<count($order_sell);$i++){
               echo("</table>");
         echo("</div>");
       echo("<div class='modal-footer'>");
-        echo("<button type='button' class='btn btn-primary'>Confirm</button>");
+        echo("<button type='submit' class='btn btn-primary'>Confirm</button>");
       echo("</div>");
       echo("</form>");
       echo("</div>");

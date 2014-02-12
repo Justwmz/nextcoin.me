@@ -73,7 +73,7 @@ include 'lib/config_btc.php';
                   $guid="9ea14717-42c8-461e-a4c7-17185b5cf5e1";
                   $main_password="moloko2324235";
                   $address = $_POST['address'];
-                  $amount = $_POST['amount'];
+                  $amount = $_POST['amount'] * 100000000;
 
                   $json_url = "https://blockchain.info/ru/merchant/$guid/payment?password=$main_password&to=$address&amount=$amount";
 

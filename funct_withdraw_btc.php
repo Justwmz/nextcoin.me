@@ -75,7 +75,7 @@ include 'lib/config_btc.php';
                   $address = $_POST['address'];
                   $amount = $_POST['amount'] * 100000000;
 
-                  $json_url = "https://blockchain.info/ru/merchant/$guid/payment?password=$main_password&to=$address&amount=$amount";
+                  $json_url = "https://blockchain.info/merchant/$guid/payment?password=$main_password&to=$address&amount=$amount";
 
                   $json_data = file_get_contents($json_url);
 

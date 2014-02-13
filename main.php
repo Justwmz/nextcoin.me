@@ -33,7 +33,7 @@ include 'deposit_nxt.php';
 
     <script type="text/javascript">
 	<!--	
-	function validate_form ( )
+	function validate_form_sell ( )
 	{
 		valid = true;
 
@@ -56,7 +56,7 @@ include 'deposit_nxt.php';
 	       	if(document.sell_nxt.price.value == "")
 	        {
 	        		//alert ( "Amount can't be less 100 and empty." );
-	                document.getElementById('price_alert').style.display = 'block';
+	                document.getElementById('price_alert_sell').style.display = 'block';
 	                document.sell_nxt.price.focus();
 	                valid = false;
 	        }
@@ -64,6 +64,38 @@ include 'deposit_nxt.php';
 	
 	        return valid;
 	}
+
+  function validate_form_buy ( )
+  {
+    valid = true;
+
+            if(document.buy_nxt.amount.value < 100)
+          {
+              //alert ( "Amount can't be less 100 and empty." );
+                  document.getElementById('buy_alert').style.display = 'block';
+                  document.buy_nxt.amount.focus();
+                  valid = false;
+          }
+  
+          if (document.buy_nxt.amount.value == "")
+          {
+                  //alert ( "Amount can't be less 100 and empty." );
+                  document.getElementById('buy_alert').style.display = 'block';
+                  document.buy_nxt.amount.focus();
+                  valid = false;
+          }
+
+          if(document.buy_nxt.price.value == "")
+          {
+              //alert ( "Amount can't be less 100 and empty." );
+                  document.getElementById('price_alert_buy').style.display = 'block';
+                  document.buy_nxt.price.focus();
+                  valid = false;
+          }
+
+  
+          return valid;  
+  }
 
 	function calculate_sell()
 	{
@@ -279,11 +311,11 @@ include 'deposit_nxt.php';
                             		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                             		Amount can't be less 100 and empty!
                             	</div>
-                            	<div id ="price_alert" style="display: none;" class="alert alert-danger">
+                            	<div id ="price_alert_sell" style="display: none;" class="alert alert-danger">
                             		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                             		Price can't be empty!
                             	</div>
-                            <form name="sell_nxt" class="form-horizontal" role="form" method="POST" action="sell_nxt.php" onsubmit="return validate_form ( );">
+                            <form name="sell_nxt" class="form-horizontal" role="form" method="POST" action="sell_nxt.php" onsubmit="return validate_form_sell ( );">
                               <div class="form-group">
                                 <label for="inputAmount3" class="col-sm-2 control-label">Amount</label>
                                   <div class="col-sm-8">
@@ -318,7 +350,15 @@ include 'deposit_nxt.php';
                         <tr>
                           <td>
                             <legend><center>Buy NXT</center></legend>
-                            <form name="buy_nxt" class="form-horizontal" role="form">
+                              <div id ="buy_alert" style="display: none;" class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                Amount can't be less 100 and empty!
+                              </div>
+                              <div id ="price_alert_buy" style="display: none;" class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                Price can't be empty!
+                              </div>
+                            <form name="buy_nxt" class="form-horizontal" role="form" method="POST" action="buy_nxt.php" onsubmit="return validate_form_buy ( );">
                               <div class="form-group">
                                 <label for="inputAmount3" class="col-sm-2 control-label">Amount</label>
                                   <div class="col-sm-8">
@@ -339,7 +379,7 @@ include 'deposit_nxt.php';
                                  </div>
                                       <div class="form-group">
                                         <div class="col-sm-offset-2 col-sm-10">
-                                          <button type="submit" class="btn btn-primary" disabled="disabled">Buy NXT</button>
+                                          <button type="submit" class="btn btn-primary">Buy NXT</button>
                                           <button type="button" class="btn btn-danger" onclick="calculate_buy();">Calculate</button>
                                         </div>
                                       </div>
@@ -526,7 +566,7 @@ for($i=0;$i<count($order_buy);$i++){
           echo("<h4 class='modal-title' id='myModalLabel'>Quick Sell NXT</h4>");
         echo("</div>");
         echo("<div class='modal-body'>");
-        echo("<form method='POST' action=''>");
+        echo("<form role='form' method='POST' action='qsell_nxt.php'>");
         echo("<div class='alert alert-info'>Upon clicking on 'Confirm' the transaction is processed instantly and the total price is deducted from your online cash balance!</div>");
               echo("<table class='table table-bordered'>");
               echo("<tr>");
@@ -549,7 +589,7 @@ for($i=0;$i<count($order_buy);$i++){
               echo("</table>");
         echo("</div>");
       echo("<div class='modal-footer'>");
-        echo("<button type='button' class='btn btn-primary'>Confirm</button>");
+        echo("<button type='submit' class='btn btn-primary'>Confirm</button>");
       echo("</div>");
       echo("</form>");
       echo("</div>");

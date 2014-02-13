@@ -20,12 +20,20 @@ $db = new SafeMySQL();
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-        <script type="text/javascript">
+    </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <ul class="nav navbar-nav navbar-right">
+            <?php
+            include 'include/balance.php';        
+            ?> 
+  <script type="text/javascript">
   <!--  
   function withdraw()
   {
     valid = true;
-    var a = <?php echo $balance; ?>;
+    var a = <?php echo $balance_nxt; ?>;
 
           if(document.withdraw_form.amount.value > a)
           {
@@ -38,15 +46,7 @@ $db = new SafeMySQL();
       return valid;
   }
   //-->
-  </script>
-    </head>
-  <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <ul class="nav navbar-nav navbar-right">
-            <?php
-            include 'include/balance.php';        
-            ?>            
+  </script>           
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
                 <?php
@@ -91,7 +91,7 @@ $db = new SafeMySQL();
           <div class="alert alert-info">Wait please few minutes for procces ended and <b>don't close this page!</b></div>
               <div id ="withdraw_alert" class="alert alert-danger" style="display: none;">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                Can't be more then your balance. Your balance is <b><?php echo $balance; ?></b>
+                Can't be more then your balance. Your balance is <b><?php echo $balance_nxt; ?></b>
               </div>
             <div class="form-group">
               <label for="inputEmail3" class="col-sm-2 control-label">Amount</label>

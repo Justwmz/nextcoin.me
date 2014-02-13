@@ -29,6 +29,25 @@ include 'lib/config_btc.php';
             <?php
             include 'include/balance.php';        
             ?>
+            <script type="text/javascript">
+            <!--  
+            function withdraw()
+            {
+              valid = true;
+              var a = <?php echo $balance_btc; ?>;
+
+                    if(document.withdraw_form.amount.value > a)
+                    {
+                        //alert ( "Amount can't be less 100 and empty." );
+                            document.getElementById('withdraw_alert').style.display = 'block';
+                            document.withdraw_form.amount.focus();
+                            valid = false;
+                    }
+
+                return valid;
+            }
+            //-->
+            </script> 
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
                 <?php
@@ -69,8 +88,12 @@ include 'lib/config_btc.php';
     <div class="container" style="padding-top: 70px">
       <div class="row">
         <div class="col-md-8">
-          <form name="withdraw_form" class="form-horizontal" role="form" method="POST" action="funct_withdraw_btc.php">
+          <form name="withdraw_form" class="form-horizontal" role="form" method="POST" onsubmit="return withdraw();" action="funct_withdraw_btc.php">
           <div class="alert alert-info">Withdraw to your bitcoin address. All transactions include a 0.0005 BTC miners fee!</b></div>
+              <div id ="withdraw_alert" class="alert alert-danger" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                Can't be more then your balance. Your balance is <b><?php echo $balance_btc; ?></b>
+              </div>
             <div class="form-group">
               <label for="inputEmail3" class="col-sm-2 control-label">Amount</label>
               <div class="col-sm-6">

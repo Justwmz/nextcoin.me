@@ -10,7 +10,7 @@ $db = new SafeMySQL();
     $res = $db->getRow("SELECT * FROM users WHERE name=?s AND password=?s", $login, $passwordHash);
     // Есть ли пользователь с таким логином?
     if (count($res) == "") { 
-       $loginerr.="Такого пользователя нет, или пароль не верный!";
+       $loginerr.="No such user or password incorrect , check it and re login please!";
        }
     
     echo "<b style='color:grey;'>$loginerr</b><br>"; 

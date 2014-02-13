@@ -15,7 +15,7 @@ $db = new SafeMySQL();
 <!DOCTYPE html>
 <html>
   <head>
-    <title>NextCoin.me | Sell NXT</title>
+    <title>NextCoin.me | Buy NXT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <!-- Bootstrap -->
@@ -73,12 +73,12 @@ $db = new SafeMySQL();
           $amount = $_POST['amount'];
           $price = $_POST['price'];
           $usd = $price * $amount;
-          if ($amount > $balance_nxt)
+          if ($amount > $balance_btc)
           {
             echo("<div class='alert alert-danger'>Operation can not be executed because you are not enough funds!</div>");
           }
           else{
-                $sell_nxt = $db->query("INSERT INTO orders (user_id, price, amount, usd, status) VAlUES ($user_id, $price, $amount, $usd, 1)");
+                $sell_nxt = $db->query("INSERT INTO orderb (user_id, price, amount, usd, status) VAlUES ($user_id, $price, $amount, $usd, 1)");
                 $db->query("UPDATE users SET holdings = holdings + $amount WHERE id = ?i ",$user_id);
                 if($sell_nxt == 1){
                   echo("<div class='alert alert-success'>Операция выполнена успешно!</div>");

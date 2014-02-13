@@ -12,9 +12,25 @@ if (preg_match("/[^(\w)|(\x7F-\xFF)|(\s)]/",$nickname))
 		{
 		include_once 'lib/safemysql.class.php';
 		$db = new SafeMySQL();
-		$sql = "INSERT INTO users (name, email, wallet_nxt, password) VALUES (?s, ?s, ?s, ?s)";
-		$db->query($sql,$nickname,$email,$wallet,$password);
-		sleep(2);
-		header ("location: index.php");
+		$result = $db->getAll("SELECT * FROM users");
+			for($i = 0; $i < count($result); $i++)
+			{
+				if($result[$i]['name'] == $nickname)
+					{
+						echo "Error. Nickname already used!";
+						exit();
+					}elseif($result[$i]['email'] == $email)
+							{
+								echo "Error. E-mail already used!";
+								exit();
+							}
+							else{
+								$sql = "INSERT INTO users (name, email, wallet_nxt, password) VALUES (?s, ?s, ?s, ?s)";
+								$db->query($sql,$nickname,$email,$wallet,$password);
+								sleep(2);
+								header("location: index.php");
+								break 1;
+							}
+			}	
 		}
 ?>

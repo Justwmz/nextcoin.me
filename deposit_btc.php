@@ -58,7 +58,6 @@ include 'lib/config_btc.php';
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="main.php">Home</a></li>
             <li><a href="#about" data-toggle="modal" data-target="#about">About</a></li>         
             <li><a href="#faq" data-toggle="modal" data-target="#faq">FAQ</a></li>
             <li><a href="#contact" data-toggle="modal" data-target="#contact">Contact</a></li>

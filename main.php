@@ -229,7 +229,6 @@ include 'deposit_nxt.php';
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="main.php">Home</a></li>
             <li><a href="#about" data-toggle="modal" data-target="#about">About</a></li>         
             <li><a href="#faq" data-toggle="modal" data-target="#faq">FAQ</a></li>
             <li><a href="#contact" data-toggle="modal" data-target="#contact">Contact</a></li>
@@ -243,7 +242,21 @@ include 'deposit_nxt.php';
                       			<table class="table table-bordered">
                       			  <tr>
                       			    <td>
-                      			      <legend>Lates News</legend>
+                      			  <legend>Course</legend>
+                                  <center>
+                                  <div id="chartdiv" style="height:200px; width:500px;">
+                                  </div>
+                                  </center>
+                      			      
+                     			     </td>
+                     			   </tr>
+                     			</table>
+                		</div>
+                            <div class="col-md-6">
+                            <table class="table table-bordered">
+                              <tr>
+                                <td>
+												<legend>Lates News</legend>
                       							<div class="panel-group" id="accordion">
                       							<?php
                                                $news = $db->getAll("SELECT * FROM news");
@@ -283,19 +296,6 @@ include 'deposit_nxt.php';
                                               }
                                             ?>
                       							</div>
-                     			     </td>
-                     			   </tr>
-                     			</table>
-                		</div>
-                            <div class="col-md-6">
-                            <table class="table table-bordered">
-                              <tr>
-                                <td>
-                                  <legend>Course</legend>
-                                  <center>
-                                  <div id="chartdiv" style="height:200px; width:500px;">
-                                  </div>
-                                  </center>
                                 </td>
                               </tr>
                             </table>
